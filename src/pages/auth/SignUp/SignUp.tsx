@@ -51,7 +51,7 @@ const SignUp = () => {
       localStorage.setItem('authorization', r.accessToken)
       localStorage.setItem('userData', JSON.stringify(r.user))
       navigate('/config')
-    }).catch((e) => toast({ description: 'Email ou senha incorretos' })).finally(() => setLoading(false))
+    }).catch(() => toast({ description: 'Email ou senha incorretos' })).finally(() => setLoading(false))
   }
 
   return (

@@ -1,8 +1,7 @@
+import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import Header from "../header/Header";
-import { Toaster } from "../ui/toaster";
-import { useEffect } from "react";
 
 const InternalLayout = () => {
   const navigate = useNavigate();

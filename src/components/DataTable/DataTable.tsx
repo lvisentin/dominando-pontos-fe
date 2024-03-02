@@ -8,40 +8,9 @@ export default function DataTable({
   handleEditClick,
   handleDeleteClick,
   handlePreviewClick,
-  handleCheckboxClick,
-  handleUnlinkClick,
   header,
-  multiActions = false,
-  actions = [],
   footer,
 }: DataTableProps) {
-  const isUsingActions =
-    handleEditClick ||
-    handleDeleteClick ||
-    handlePreviewClick ||
-    handleUnlinkClick;
-
-  // function confirmDelete(row: any) {
-  //   Swal.fire({
-  //     title: 'Você tem certeza?',
-  //     text: 'Gostaria de excluir?',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Sim, excluir',
-  //     cancelButtonText: 'Cancelar',
-  //   }).then((result) => {
-  //     if (result.isConfirmed && handleDeleteClick) {
-  //       handleDeleteClick(row);
-  //     }
-  //   });
-  // }
-
-  function showActions(row: any) {
-    const actionMenu = document.getElementById(`actions-menu-${row.id}`);
-    actionMenu?.classList.toggle(styles.shown);
-  }
 
   return (
     <div className="card p-0">
@@ -95,77 +64,6 @@ export default function DataTable({
                     </td>
                   );
                 })}
-
-                {isUsingActions && !multiActions && (
-                  <td className={`${styles.td} px-6  pl-8`}>
-                    <div
-                      className={`action__buttons flex items-center justify-end`}
-                    >
-                      {/* {handleEditClick && (
-                        <EditButton
-                          className={`${styles.buttons}`}
-                          onClick={() => handleEditClick(row)}
-                          key={'edit'}
-                        />
-                      )}
-
-                      {handlePreviewClick && (
-                        <DetailsButton
-                          className={`${styles.buttons} ml-2`}
-                          onClick={() => handlePreviewClick(row)}
-                          key={'details'}
-                        />
-                      )}
-
-                      {handleDeleteClick && (
-                        <IconButton
-                          iconPath="/images/trash.svg"
-                          label="Excluir"
-                          className={`${styles.buttons} ml-2`}
-                          onClick={() => confirmDelete(row)}
-                          key={'delete'}
-                        />
-                      )}
-
-                      {handleUnlinkClick && (
-                        <IconButton
-                          iconPath="/images/paperclip-slash.svg"
-                          label="Desvincular"
-                          className={`${styles.buttons} ml-2`}
-                          onClick={() => handleUnlinkClick(row)}
-                          key={'unlink'}
-                        />
-                      )} */}
-                    </div>
-                  </td>
-                )}
-
-                {multiActions && (
-                  <td className="relative">
-                    {/* <ActionDotsIcon
-                      id={`actions-icon-${row.id}`}
-                      onClick={() => showActions(row)}
-                      className={`${styles.actionIcon} cursor-pointer`}
-                    /> */}
-
-                    {/* <div
-                      id={`actions-menu-${row.id}`}
-                      className={`${styles.actionsMenu} flex flex-col w-44 absolute`}
-                    >
-                      {actions.map((action, index) =>
-                        createComponent(
-                          'div',
-                          {
-                            className: styles.action,
-                            key: index,
-                            onClick: () => action.onClick(row),
-                          },
-                          action.element
-                        )
-                      )}
-                    </div> */}
-                  </td>
-                )}
               </tr>
             ))}
         </tbody>
