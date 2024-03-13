@@ -1,4 +1,4 @@
-import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import SidebarLink from "../SidebarLink/SidebarLink";
 
 const Sidebar = () => {
@@ -6,7 +6,7 @@ const Sidebar = () => {
     <ul>
       {/* <SidebarLink icon={faTableColumns} to="/dashboard" label="Dashboard" /> */}
       <SidebarLink icon={faCog} to="/config" label="Configurar alertas" />
-      {/* <SidebarLink icon={faEnvelope} to="/alerts" label="Alertas de passagens" /> */}
+      <SidebarLink icon={faEnvelope} to="/alerts" label="Alertas de passagens" />
     </ul>
   </aside>
 }
