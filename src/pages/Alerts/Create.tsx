@@ -36,6 +36,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandLoading,
 } from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -43,7 +44,7 @@ import LoadingButton from "@/components/LoadingButton/LoadingButton";
 import { airportsService } from "@/services/airports/AirportsService";
 import { Airports } from "@/services/airports/airports.model";
 import { useToast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { userService } from "@/services/user/UserService";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -52,10 +53,12 @@ const Alerts = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const [airports, setAirports] = useState<{ value: string; label: string; }[]>([]);
+  const [searchInput, setSearchInput] = useState('')
+  const [triggerRef, setTriggerRef] = useState<HTMLButtonElement | null>(null)
 
-const fetchAirports = () => {
+const fetchAirports = useCallback(() => {
   setLoading(true);
-  airportsService.getAirports()
+  airportsService.getAirports({ search: searchInput })
     .then((res: Airports[]) => {
       const airportsWithOptions = res.map((airport: Airports) => ({
         value: airport.code,
@@ -65,11 +68,11 @@ const fetchAirports = () => {
     })
     .catch(() => toast({ description: 'Ocorreu um erro ao carregar os aeroportos' }))
     .finally(() => setLoading(false));
-};
+}, [searchInput, toast])
 
   useEffect(() => {
     fetchAirports();
-  }, [])
+  }, [fetchAirports])
 
   const currentDate = new Date().toISOString().split('T')[0];
 
@@ -147,7 +150,9 @@ const fetchAirports = () => {
                   <FormItem className="flex flex-col">
                     <FormLabel className="pb-1">Origem</FormLabel>
                     <Popover>
-                      <PopoverTrigger asChild>
+                      <PopoverTrigger asChild ref={(elementRef) => { 
+                        setTriggerRef(elementRef)
+                      }}>
                         <FormControl>
                           <Button
                             variant="outline"
@@ -166,11 +171,17 @@ const fetchAirports = () => {
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="min-w-[400-px] w-full p-0 max-h-[200px] overflow-y-auto">
+                      <PopoverContent className="min-w-[400-px] w-full p-0" style={{
+                        minWidth: triggerRef?.clientWidth ?? 400,
+                        width: triggerRef?.clientWidth ?? undefined,
+                      }}>
                         <Command>
-                          <CommandInput placeholder="Selecione a unidade" />
-                          <CommandEmpty className="pr-2 pl-2">Nenhum aeroporto encontrado.</CommandEmpty>
-                          <CommandGroup>
+                          <CommandInput onChangeCapture={(e) => setSearchInput(e.currentTarget.value)} placeholder="Selecione a unidade" />
+                          { loading && <CommandLoading>Carregando os aeroportos...</CommandLoading> }
+                          { !loading && <CommandEmpty className="pr-2 pl-2">
+                            { searchInput.length <= 1 ? 'Digite pelo menos 2 caracteres' : 'Nenhum aeroporto encontrado.'}
+                            </CommandEmpty>}
+                          <CommandGroup className="max-h-[200px] overflow-y-auto">
                             {airports.map((airport) => (
                               <CommandItem
                                 value={airport.label}
@@ -206,7 +217,9 @@ const fetchAirports = () => {
                   <FormItem className="flex flex-col">
                     <FormLabel className="pb-1">Origem</FormLabel>
                     <Popover>
-                      <PopoverTrigger asChild>
+                      <PopoverTrigger asChild ref={(elementRef) => { 
+                        setTriggerRef(elementRef)
+                      }}>
                         <FormControl>
                           <Button
                             variant="outline"
@@ -225,11 +238,17 @@ const fetchAirports = () => {
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="min-w-[400-px] w-full p-0 max-h-[200px] overflow-y-auto">
+                      <PopoverContent className="min-w-[400-px] w-full p-0" style={{
+                        minWidth: triggerRef?.clientWidth ?? 400,
+                        width: triggerRef?.clientWidth ?? undefined,
+                      }}>
                         <Command>
-                          <CommandInput placeholder="Selecione a unidade" />
-                          <CommandEmpty className="pr-2 pl-2">Nenhum aeroporto encontrado.</CommandEmpty>
-                          <CommandGroup>
+                          <CommandInput onChangeCapture={(e) => setSearchInput(e.currentTarget.value)} placeholder="Selecione a unidade" />
+                          { loading && <CommandLoading>Carregando os aeroportos...</CommandLoading> }
+                          { !loading && <CommandEmpty className="pr-2 pl-2">
+                            { searchInput.length <= 1 ? 'Digite pelo menos 2 caracteres' : 'Nenhum aeroporto encontrado.'}
+                            </CommandEmpty>}
+                          <CommandGroup className="max-h-[200px] overflow-y-auto">
                             {airports.map((airport) => (
                               <CommandItem
                                 value={airport.label}
@@ -265,7 +284,7 @@ const fetchAirports = () => {
                   <FormItem className="text-left">
                     <FormLabel>Data de ida</FormLabel>
                     <FormControl>
-                      <Input type="date" min={currentDate} placeholder="Selecione a unidade" {...field} />
+                      <Input type="date" min={currentDate} max={form.watch('arrivalDate')} placeholder="Selecione uma unidade" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -279,7 +298,7 @@ const fetchAirports = () => {
                   <FormItem className="text-left">
                     <FormLabel>Data de volta</FormLabel>
                     <FormControl>
-                      <Input type="date" min={form.watch('departureDate')} placeholder="Selecione a unidade" {...field} />
+                      <Input type="date" min={form.watch('departureDate')} placeholder="Selecione uma unidade" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
