@@ -25,36 +25,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import LoadingButton from "@/components/LoadingButton/LoadingButton";
-// import { airportsService } from "@/services/airports/AirportsService";
-// import { Airports } from "@/services/airports/airports.model";
+import { airportsService } from "@/services/airports/AirportsService";
+import { Airports } from "@/services/airports/airports.model";
 import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userService } from "@/services/user/UserService";
-import { User } from "@/services/user/user.model";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Alerts = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  // const [airports, setAirports] = useState<Airports[]>([]);
+  const [airports, setAirports] = useState<{ value: string; label: string; }[]>([]);
 
-  // const fetchAirports = () => {
-  //   setLoading(true);
-  //   airportsService.getAirports()
-  //     .then((r) => {
-  //       setAirports(r);
-  //     })
-  //     .catch(() => toast({ description: 'Ocorreu um erro ao carregar os aeroportos' }))
-  //     .finally(() => setLoading(false))
-  // }
+const fetchAirports = () => {
+  setLoading(true);
+  airportsService.getAirports()
+    .then((res: Airports[]) => {
+      const airportsWithOptions = res.map((airport: Airports) => ({
+        value: airport.code,
+        label: `${airport.code} - ${airport.name}`
+      }));
+      setAirports(airportsWithOptions);
+    })
+    .catch(() => toast({ description: 'Ocorreu um erro ao carregar os aeroportos' }))
+    .finally(() => setLoading(false));
+};
 
-  // useEffect(() => {
-  //   fetchAirports();
-  // }, [])
-
-  // console.log(airports);
+  useEffect(() => {
+    fetchAirports();
+  }, [])
 
   const currentDate = new Date().toISOString().split('T')[0];
 
@@ -93,7 +108,6 @@ const Alerts = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
   
-    // Convert Date objects to ISO string format
     const formattedValues = {
       ...values,
       departureDate: new Date(values.departureDate).toISOString(),
@@ -101,9 +115,7 @@ const Alerts = () => {
     };
   
     userService.createSavedDestinations(formattedValues)
-      .then((r: User) => {
-        console.log(r);
-      })
+      .then(() => toast({ description: 'Alerta cadastrado com sucesso!' }))
       .catch(() => toast({ description: 'Campos inválidos' }))
       .finally(() => setLoading(false));
   }
@@ -128,85 +140,175 @@ const Alerts = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
             <CardContent className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="departureAirport"
-                  render={({ field }) => (
-                    <FormItem className="text-left">
-                      <FormLabel>Origem</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Selecione a unidade" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="arrivalAirport"
-                  render={({ field }) => (
-                    <FormItem className="text-left">
-                      <FormLabel>Destino</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Selecione a unidade" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="departureDate"
-                  render={({ field }) => (
-                    <FormItem className="text-left">
-                      <FormLabel>Data de ida</FormLabel>
-                      <FormControl>
-                        <Input type="date" min={currentDate} placeholder="Selecione a unidade" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="arrivalDate"
-                  render={({ field }) => (
-                    <FormItem className="text-left">
-                      <FormLabel>Data de volta</FormLabel>
-                      <FormControl>
-                        <Input type="date" min={form.watch('departureDate')} placeholder="Selecione a unidade" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="cabinClass"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Cabine</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormField
+                control={form.control}
+                name="departureAirport"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="pb-1">Origem</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a verified email to display" />
-                          </SelectTrigger>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? airports.find(
+                                  (airport) => airport.value === field.value
+                                )?.label
+                              : "Selecione a unidade"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="economy">Economica</SelectItem>
-                          <SelectItem value="premiumEconomy">Economica Premium</SelectItem>
-                          <SelectItem value="business">Executiva</SelectItem>
-                          <SelectItem value="first">Primeira Classe</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      </PopoverTrigger>
+                      <PopoverContent className="min-w-[400-px] w-full p-0 max-h-[200px] overflow-y-auto">
+                        <Command>
+                          <CommandInput placeholder="Selecione a unidade" />
+                          <CommandEmpty className="pr-2 pl-2">Nenhum aeroporto encontrado.</CommandEmpty>
+                          <CommandGroup>
+                            {airports.map((airport) => (
+                              <CommandItem
+                                value={airport.label}
+                                key={airport.value}
+                                onSelect={() => {
+                                  form.setValue("departureAirport", airport.value)
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    airport.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {airport.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="arrivalAirport"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="pb-1">Origem</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value
+                              ? airports.find(
+                                  (airport) => airport.value === field.value
+                                )?.label
+                              : "Selecione a unidade"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="min-w-[400-px] w-full p-0 max-h-[200px] overflow-y-auto">
+                        <Command>
+                          <CommandInput placeholder="Selecione a unidade" />
+                          <CommandEmpty className="pr-2 pl-2">Nenhum aeroporto encontrado.</CommandEmpty>
+                          <CommandGroup>
+                            {airports.map((airport) => (
+                              <CommandItem
+                                value={airport.label}
+                                key={airport.value}
+                                onSelect={() => {
+                                  form.setValue("arrivalAirport", airport.value)
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    airport.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {airport.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="departureDate"
+                render={({ field }) => (
+                  <FormItem className="text-left">
+                    <FormLabel>Data de ida</FormLabel>
+                    <FormControl>
+                      <Input type="date" min={currentDate} placeholder="Selecione a unidade" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="arrivalDate"
+                render={({ field }) => (
+                  <FormItem className="text-left">
+                    <FormLabel>Data de volta</FormLabel>
+                    <FormControl>
+                      <Input type="date" min={form.watch('departureDate')} placeholder="Selecione a unidade" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="cabinClass"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cabine</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione a cabine" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="economy">Economica</SelectItem>
+                        <SelectItem value="premiumEconomy">Economica Premium</SelectItem>
+                        <SelectItem value="business">Executiva</SelectItem>
+                        <SelectItem value="first">Primeira Classe</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </CardContent>
 
             <CardFooter className="flex">
