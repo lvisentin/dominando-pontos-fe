@@ -1,0 +1,26 @@
+.menuItem {
+  display: flex;
+  align-items: center;
+  color: #ADAEB4;
+  font-weight: 600;
+  padding: 16px;
+  margin: 0 12px;
+  border-radius: 12px;
+  transition: background 0.25s ease-in-out;
+}
+
+.menuItem:hover {
+  background: #F5F5F5;
+}
+
+.active {
+  color: #30697C;
+}
+
+.menuItem svg path {
+  fill: #ADAEB4;
+}
+
+.active svg path {
+  fill: #30697C;
+}
