@@ -9,6 +9,7 @@ class UserService {
 
   async createSavedDestinations({ departureAirport, arrivalAirport, departureDate, arrivalDate, cabinClass }: { departureAirport: string, arrivalAirport: string, departureDate: string, arrivalDate: string, cabinClass: string }) {
     const authorization = `Bearer ${localStorage.getItem('authorization')}`;
+    console.log(authorization)
     return await api.post(`/users/saved-destinations`, { departureAirport, arrivalAirport, departureDate, arrivalDate, cabinClass }, { authorization })
   }
   
