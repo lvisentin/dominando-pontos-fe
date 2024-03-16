@@ -8,11 +8,22 @@ import convertDateToGMT3 from "@/shared/utils/convertDateToGMT3";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react";
+import NoData from "@/components/NoData/NoData";
+import { alertsService } from "@/services/alerts/AlertsService";
 
 const Alerts = () => {
   const [loading, setLoading] = useState(false);
   const [savedDestinations, setSavedDestinations] = useState<User[]>([]);
   const { toast } = useToast();
+
+  const deleteAlert = (alertId: number) => {
+    alertsService.deleteSavedDestination(alertId)
+      .then(() => {
+        fetchSavedDestinations();
+        toast({ description: 'Alerta deletado com sucesso' })
+      })
+      .catch(() => toast({ description: 'Ocorreu um erro' }))
+  }
 
   const fetchSavedDestinations = () => {
     setLoading(true);
@@ -25,7 +36,7 @@ const Alerts = () => {
   }
 
   useEffect(() => {
-    fetchSavedDestinations();
+    fetchSavedDestinations(); 
   }, [])
 
   const columns: TableColumn[] = [
@@ -60,7 +71,6 @@ const Alerts = () => {
     },
   ]
 
-
   return <div className="flex flex-col text-left ">
     <header className="flex item-center justify-between">
       <div className="prose">
@@ -73,8 +83,11 @@ const Alerts = () => {
       </NavLink>
     </header>
 
-    {loading ? <Loader2 className="mr-2 h-12 w-12 animate-spin self-center" /> : <DataTable columns={columns} data={savedDestinations} />}
-
+    {
+      savedDestinations.length > 0
+        ? loading ? <Loader2 className="mr-2 h-12 w-12 animate-spin self-center" /> : <DataTable columns={columns} data={savedDestinations} handleDeleteClick={(alert) => deleteAlert(alert.id)} />
+        : <NoData message={'Não encontramos nenhuma operação cadastrada'} />
+    }
   </div>
 }
 

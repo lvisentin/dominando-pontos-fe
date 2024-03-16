@@ -1,6 +1,8 @@
 
+import DeleteButton from '../DeleteButton/DeleteButton';
 import { DataTableProps } from './DataTable.model';
 import styles from './DataTable.module.css';
+import Swal from 'sweetalert2';
 
 export default function DataTable({
   data,
@@ -11,12 +13,28 @@ export default function DataTable({
   header,
   footer,
 }: DataTableProps) {
+  function confirmDelete(row: any) {
+    Swal.fire({
+      title: 'Você tem certeza?',
+      text: 'Gostaria de excluir?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, excluir',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed && handleDeleteClick) {
+        handleDeleteClick(row);
+      }
+    });
+  }
 
   return (
     <div className="card p-0">
       <div className="tableHeader">{header && header}</div>
 
-      <table className={`table w-full ${styles.table}`}>
+      <table className={`table w-full ${styles.table}`} style={{ backgroundColor: 'white' }}>
         <thead className="border-none">
           <tr className="border-none">
             {columns.length > 0 &&
@@ -29,13 +47,6 @@ export default function DataTable({
                   {column.name}
                 </th>
               ))}
-
-            {(handleEditClick || handleDeleteClick || handlePreviewClick) && (
-              <th
-                className={`text-left text-sm pt-8 pb-6 pl-8 ${styles.tableHeader}`}
-                id={`table-header-actions`}
-              ></th>
-            )}
           </tr>
         </thead>
 
@@ -64,6 +75,20 @@ export default function DataTable({
                     </td>
                   );
                 })}
+
+                <td className={`${styles.td}`}>
+                  <div
+                    className={`action__buttons flex items-center justify-center`}
+                  >
+                    {handleDeleteClick && (
+                      <DeleteButton
+                        className={`${styles.buttons} ml-2`}
+                        onClick={() => confirmDelete(row)}
+                        key={'delete'}
+                      />
+                    )}
+                  </div>
+                </td>
               </tr>
             ))}
         </tbody>

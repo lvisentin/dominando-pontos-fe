@@ -22,6 +22,18 @@ class Api {
         return r.json()
       })
   }
+
+  async delete(endpoint: string, headers = {}) {
+    return await fetch(`${this.BASE_URL}/${endpoint}`,
+      { method: 'DELETE', headers })
+      .then(r => {
+        if (!r.ok) {
+          return r.json().then((e) => { throw e })
+        }
+
+        return r.json()
+      })
+  }
 }
 
 export const api = new Api();

@@ -56,66 +56,6 @@
   background: var(--neutral-50);
 }
 
-/* .actionsMenu {
-  border-radius: 8px;
-  top: 60px;
-  background: var(--neutral-900);
-  opacity: 0 !important;
-  max-height: 0;
-  transition: opacity 0.25s ease-in-out;
-  box-shadow: 0px 2px 4px 0px rgba(0, 1, 33, 0.06);
-
-  @media only screen and (min-width: 1024px) {
-    right: 35% !important;
-  }
-
-  * {
-    display: none;
-    border: none !important;
-  }
-
-  &.shown {
-    opacity: 1 !important;
-    max-height: fit-content;
-
-    * {
-      display: block;
-    }
-
-    .action {
-      &:not(:last-child) {
-        border-bottom: 1px solid #474a5c !important;
-      }
-    }
-  }
-
-  &:before {
-    content: '';
-    display: none;
-  }
-
-  &.shown:before {
-    content: '\A';
-    display: block;
-    transform: rotate(90deg);
-    border-style: solid;
-    border-width: 10px 15px 10px 0;
-    border-color: transparent var(--neutral-900) transparent transparent;
-    position: absolute;
-    top: -17px;
-    right: 41px;
-  }
-
-  .action {
-    cursor: pointer;
-    border-radius: 8px;
-    color: #fff;
-
-
-  }
-
-  .action:hover {
-    background: var(--neutral-800);
-  }
-
-} */
+button svg path {
+  fill: white;
+}

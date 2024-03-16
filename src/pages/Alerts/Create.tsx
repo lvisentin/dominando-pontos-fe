@@ -137,7 +137,7 @@ const Alerts = () => {
                   <FormItem className="text-left">
                     <FormLabel>Data de ida</FormLabel>
                     <FormControl>
-                      <Input className="w-[170px]" type="date" min={currentDate} max={form.watch('arrivalDate')} placeholder="Selecione uma unidade" {...field} />
+                      <Input type="date" min={currentDate} max={form.watch('arrivalDate')} placeholder="Selecione uma unidade" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -151,7 +151,7 @@ const Alerts = () => {
                   <FormItem className="text-left">
                     <FormLabel>Data de volta</FormLabel>
                     <FormControl>
-                      <Input className="w-[170px]" type="date" min={form.watch('departureDate') || currentDate} placeholder="Selecione uma unidade" {...field} />
+                      <Input type="date" min={form.watch('departureDate') || currentDate} placeholder="Selecione uma unidade" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
