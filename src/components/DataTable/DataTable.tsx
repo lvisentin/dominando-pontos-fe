@@ -7,9 +7,7 @@ import Swal from 'sweetalert2';
 export default function DataTable({
   data,
   columns,
-  handleEditClick,
   handleDeleteClick,
-  handlePreviewClick,
   header,
   footer,
 }: DataTableProps) {
