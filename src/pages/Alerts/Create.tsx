@@ -19,62 +19,38 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
-  CommandLoading,
 } from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import LoadingButton from "@/components/LoadingButton/LoadingButton";
-import { airportsService } from "@/services/airports/AirportsService";
-import { Airports } from "@/services/airports/airports.model";
 import { useToast } from "@/components/ui/use-toast";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { userService } from "@/services/user/UserService";
+import AirportSelect from "@/components/airportSelector/airportSelector";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Alerts = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const [airports, setAirports] = useState<{ value: string; label: string; }[]>([]);
-  const [searchInput, setSearchInput] = useState('')
   const [triggerRef, setTriggerRef] = useState<HTMLButtonElement | null>(null)
 
-const fetchAirports = useCallback(() => {
-  setLoading(true);
-  airportsService.getAirports({ search: searchInput })
-    .then((res: Airports[]) => {
-      const airportsWithOptions = res.map((airport: Airports) => ({
-        value: airport.code,
-        label: `${airport.code} - ${airport.name}`
-      }));
-      setAirports(airportsWithOptions);
-    })
-    .catch(() => toast({ description: 'Ocorreu um erro ao carregar os aeroportos' }))
-    .finally(() => setLoading(false));
-}, [searchInput, toast])
-
-  useEffect(() => {
-    fetchAirports();
-  }, [fetchAirports])
-
   const currentDate = new Date().toISOString().split('T')[0];
+
+  const cabinClasses = [
+    { label: 'Economica', value:"economy"},
+    { label: 'Economica Premium', value:"premiumEconomy"},
+    { label: 'Executiva', value:"business"},
+    { label: 'Primeira Classe', value:"first"},
+  ]
 
   const formSchema = z.object({
     departureAirport: z.string().min(3, {
@@ -123,7 +99,7 @@ const fetchAirports = useCallback(() => {
       .finally(() => setLoading(false));
   }
 
-   return <div className="flex flex-col text-left ">
+   return <div className="flex flex-col text-left">
     <header className="flex item-center justify-between">
       <div className="prose">
         <h1 className="text-base mb-2 font-bold">Criar novo alerta de passagem</h1>
@@ -149,62 +125,10 @@ const fetchAirports = useCallback(() => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel className="pb-1">Origem</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild ref={(elementRef) => { 
-                        setTriggerRef(elementRef)
-                      }}>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "w-full justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                              ? airports.find(
-                                  (airport) => airport.value === field.value
-                                )?.label
-                              : "Selecione a unidade"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="min-w-[400-px] w-full p-0" style={{
-                        minWidth: triggerRef?.clientWidth ?? 400,
-                        width: triggerRef?.clientWidth ?? undefined,
-                      }}>
-                        <Command>
-                          <CommandInput onChangeCapture={(e) => setSearchInput(e.currentTarget.value)} placeholder="Selecione a unidade" />
-                          { loading && <CommandLoading>Carregando os aeroportos...</CommandLoading> }
-                          { !loading && <CommandEmpty className="pr-2 pl-2">
-                            { searchInput.length <= 1 ? 'Digite pelo menos 2 caracteres' : 'Nenhum aeroporto encontrado.'}
-                            </CommandEmpty>}
-                          <CommandGroup className="max-h-[200px] overflow-y-auto">
-                            {airports.map((airport) => (
-                              <CommandItem
-                                value={airport.label}
-                                key={airport.value}
-                                onSelect={() => {
-                                  form.setValue("departureAirport", airport.value)
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    airport.value === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {airport.label}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <AirportSelect
+                      value={field.value}
+                      onSelect={(value) => form.setValue("departureAirport", value)}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -215,63 +139,11 @@ const fetchAirports = useCallback(() => {
                 name="arrivalAirport"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel className="pb-1">Origem</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild ref={(elementRef) => { 
-                        setTriggerRef(elementRef)
-                      }}>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "w-full justify-between",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value
-                              ? airports.find(
-                                  (airport) => airport.value === field.value
-                                )?.label
-                              : "Selecione a unidade"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="min-w-[400-px] w-full p-0" style={{
-                        minWidth: triggerRef?.clientWidth ?? 400,
-                        width: triggerRef?.clientWidth ?? undefined,
-                      }}>
-                        <Command>
-                          <CommandInput onChangeCapture={(e) => setSearchInput(e.currentTarget.value)} placeholder="Selecione a unidade" />
-                          { loading && <CommandLoading>Carregando os aeroportos...</CommandLoading> }
-                          { !loading && <CommandEmpty className="pr-2 pl-2">
-                            { searchInput.length <= 1 ? 'Digite pelo menos 2 caracteres' : 'Nenhum aeroporto encontrado.'}
-                            </CommandEmpty>}
-                          <CommandGroup className="max-h-[200px] overflow-y-auto">
-                            {airports.map((airport) => (
-                              <CommandItem
-                                value={airport.label}
-                                key={airport.value}
-                                onSelect={() => {
-                                  form.setValue("arrivalAirport", airport.value)
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    airport.value === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {airport.label}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <FormLabel className="pb-1">Destino</FormLabel>
+                    <AirportSelect
+                      value={field.value}
+                      onSelect={(value) => form.setValue("arrivalAirport", value)}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -284,7 +156,7 @@ const fetchAirports = useCallback(() => {
                   <FormItem className="text-left">
                     <FormLabel>Data de ida</FormLabel>
                     <FormControl>
-                      <Input type="date" min={currentDate} max={form.watch('arrivalDate')} placeholder="Selecione uma unidade" {...field} />
+                      <Input className="w-[170px]" type="date" min={currentDate} max={form.watch('arrivalDate')} placeholder="Selecione uma unidade" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -298,14 +170,14 @@ const fetchAirports = useCallback(() => {
                   <FormItem className="text-left">
                     <FormLabel>Data de volta</FormLabel>
                     <FormControl>
-                      <Input type="date" min={form.watch('departureDate')} placeholder="Selecione uma unidade" {...field} />
+                      <Input className="w-[170px]" type="date" min={form.watch('departureDate') || currentDate} placeholder="Selecione uma unidade" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="cabinClass"
                 render={({ field }) => (
@@ -324,6 +196,66 @@ const fetchAirports = useCallback(() => {
                         <SelectItem value="first">Primeira Classe</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name="cabinClass"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cabine</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild ref={(elementRef) => { 
+                            setTriggerRef(elementRef)
+                        }}>
+                        <Button
+                          variant="outline"
+                          role="select"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? cabinClasses.find(
+                                (cabinClass) => cabinClass.value === field.value
+                              )?.label
+                            : "Selecione a cabine"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="min-w-[400-px] w-full p-0" style={{
+                        minWidth: triggerRef?.clientWidth ?? 400,
+                        width: triggerRef?.clientWidth ?? undefined,
+                      }}>
+                        <Command>
+                          <CommandGroup className="max-h-[200px] overflow-y-auto">
+                            {cabinClasses.map((cabinClass) => (
+                              <CommandItem
+                                value={cabinClass.label}
+                                key={cabinClass.value}
+                                onSelect={() => {
+                                  form.setValue("cabinClass", cabinClass.value)
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    cabinClass.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {cabinClass.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
