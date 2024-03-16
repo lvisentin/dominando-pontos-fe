@@ -7,7 +7,7 @@ function DeleteButton(props: DeleteButtonProps) {
     <button
       disabled={props.disabled}
       {...props}
-      className={`btn bg-red-500 hover:bg-red-700 text-white rounded-md px-4 py-2`}
+      className={`btn bg-red-500 hover:bg-red-700 text-white rounded-md w-9 h-9 `}
     >
       <FontAwesomeIcon icon={faTrash} color="#fff" />
     </button>

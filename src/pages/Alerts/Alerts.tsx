@@ -42,25 +42,10 @@ const Alerts = () => {
   const columns: TableColumn[] = [
     {
       field: "departureAirport",
-      name: "Origem",
-    },
-    {
-      field: "arrivalAirport",
-      name: "Destino",
-    },
-    {
-      field: "departureDate",
-      name: "Data de saida",
-      transformData: (user: User) => {
-        return convertDateToGMT3(user.departureDate);
-      },
-    },
-    {
-      field: "arrivalDate",
-      name: "Data de chegada",
-      transformData: (user: User) => {
-        return convertDateToGMT3(user.arrivalDate);
-      },
+      name: "Detalhes",
+      transformData: (row) => {
+        return `${row.departureAirport} ➡️ ${row.arrivalAirport} em ${convertDateToGMT3(row.departureDate)}`
+      }
     },
     {
       field: "status",
@@ -71,7 +56,7 @@ const Alerts = () => {
     },
   ]
 
-  return <div className="flex flex-col text-left ">
+  return <div className="flex flex-col text-left w-full">
     <header className="flex item-center justify-between">
       <div className="prose">
         <h1 className="text-base mb-2 font-bold">Alertas de passagens</h1>
@@ -79,7 +64,7 @@ const Alerts = () => {
       </div>
 
       <NavLink to={'/alerts/create'}>
-        <Button className="mt-5 mr-10">Novo alerta</Button>
+        <Button className="ml-4 md:ml-0">Novo alerta</Button>
       </NavLink>
     </header>
 

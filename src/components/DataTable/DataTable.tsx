@@ -11,6 +11,8 @@ export default function DataTable({
   header,
   footer,
 }: DataTableProps) {
+  const rowClasses = `text-sm md:text-md pr-0 py-4 pl-4 md:py-4 md:pl-8`
+
   function confirmDelete(row: any) {
     Swal.fire({
       title: 'Você tem certeza?',
@@ -38,7 +40,7 @@ export default function DataTable({
             {columns.length > 0 &&
               columns.map((column, key) => (
                 <th
-                  className={`text-left text-sm pt-8 pb-6 pl-8 ${styles.tableHeader}`}
+                  className={`text-left text-sm py-4 pl-4 md:pt-8 md:pb-6 md:pl-8 ${styles.tableHeader}`}
                   key={key}
                   id={`table-header-${column.field}`}
                 >
@@ -60,7 +62,7 @@ export default function DataTable({
                 {columns.map((column, key) => {
                   if (!column.transformData) {
                     return (
-                      <td className={`${styles.td} px-6 pl-8 text-sm`} key={key}>
+                      <td className={`${styles.td} ${rowClasses}`} key={key}>
                         <>{row[column.field]}</>
 
                       </td>
@@ -68,13 +70,13 @@ export default function DataTable({
                   }
 
                   return (
-                    <td className={`${styles.td} px-6  pl-8`} key={key}>
+                    <td className={`${styles.td} ${rowClasses}`} key={key}>
                       {column.transformData(row)}
                     </td>
                   );
                 })}
 
-                <td className={`${styles.td}`}>
+                <td className={`${styles.td} pr-4 md:p-0`}>
                   <div
                     className={`action__buttons flex items-center justify-center`}
                   >

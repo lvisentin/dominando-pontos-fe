@@ -67,20 +67,20 @@ const Alerts = () => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-  
+
     const formattedValues = {
       ...values,
       departureDate: new Date(values.departureDate).toISOString(),
       arrivalDate: new Date(values.arrivalDate).toISOString(),
     };
-  
+
     userService.createSavedDestinations(formattedValues)
       .then(() => toast({ description: 'Alerta cadastrado com sucesso!' }))
       .catch(() => toast({ description: 'Campos inválidos' }))
       .finally(() => setLoading(false));
   }
 
-   return <div className="flex flex-col text-left">
+  return <div className="flex flex-col text-left">
     <header className="flex item-center justify-between">
       <div className="prose">
         <h1 className="text-base mb-2 font-bold">Criar novo alerta de passagem</h1>
@@ -88,7 +88,7 @@ const Alerts = () => {
       </div>
 
       <NavLink to={'/alerts'}>
-        <Button className="mt-5 mr-5">Voltar</Button>
+        <Button className="ml-4 md:ml-0">Voltar</Button>
       </NavLink>
     </header>
 
@@ -96,89 +96,89 @@ const Alerts = () => {
       <CardHeader>
         <CardTitle>Buscar Passagem</CardTitle>
       </CardHeader>
-      
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-            <CardContent className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="departureAirport"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel className="pb-1">Origem</FormLabel>
-                    <AirportSelect
-                      value={field.value}
-                      onSelect={(value) => form.setValue("departureAirport", value)}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
-              <FormField
-                control={form.control}
-                name="arrivalAirport"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel className="pb-1">Destino</FormLabel>
-                    <AirportSelect
-                      value={field.value}
-                      onSelect={(value) => form.setValue("arrivalAirport", value)}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+          <CardContent className="grid  grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="departureAirport"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="pb-1">Origem</FormLabel>
+                  <AirportSelect
+                    value={field.value}
+                    onSelect={(value) => form.setValue("departureAirport", value)}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="departureDate"
-                render={({ field }) => (
-                  <FormItem className="text-left">
-                    <FormLabel>Data de ida</FormLabel>
-                    <FormControl>
-                      <Input type="date" min={currentDate} max={form.watch('arrivalDate')} placeholder="Selecione uma unidade" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="arrivalAirport"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="pb-1">Destino</FormLabel>
+                  <AirportSelect
+                    value={field.value}
+                    onSelect={(value) => form.setValue("arrivalAirport", value)}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="arrivalDate"
-                render={({ field }) => (
-                  <FormItem className="text-left">
-                    <FormLabel>Data de volta</FormLabel>
-                    <FormControl>
-                      <Input type="date" min={form.watch('departureDate') || currentDate} placeholder="Selecione uma unidade" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="departureDate"
+              render={({ field }) => (
+                <FormItem className="text-left">
+                  <FormLabel>Data de ida</FormLabel>
+                  <FormControl>
+                    <Input type="date" min={currentDate} max={form.watch('arrivalDate')} placeholder="Selecione uma unidade" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="cabinClass"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cabine</FormLabel>
-                    <CabinClassSelect
-                      value={field.value}
-                      onSelect={(value) => form.setValue("cabinClass", value)}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
+            <FormField
+              control={form.control}
+              name="arrivalDate"
+              render={({ field }) => (
+                <FormItem className="text-left">
+                  <FormLabel>Data de volta</FormLabel>
+                  <FormControl>
+                    <Input type="date" min={form.watch('departureDate') || currentDate} placeholder="Selecione uma unidade" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <CardFooter className="flex">
-              <LoadingButton loading={loading} text={'Criar Alerta'} type="submit" />
-            </CardFooter>
-          </form>
-        </Form>
+            <FormField
+              control={form.control}
+              name="cabinClass"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cabine</FormLabel>
+                  <CabinClassSelect
+                    value={field.value}
+                    onSelect={(value) => form.setValue("cabinClass", value)}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+
+          <CardFooter className="flex">
+            <LoadingButton loading={loading} text={'Criar Alerta'} type="submit" />
+          </CardFooter>
+        </form>
+      </Form>
     </Card>
   </div>
 }

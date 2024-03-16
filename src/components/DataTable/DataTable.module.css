@@ -27,6 +27,12 @@
   border: none;
 }
 
+@media only screen and (max-width: 1024px) {
+  .tr {
+    height: 24px;
+  }
+}
+
 .tr:last-child .td:first-child {
   border-bottom-left-radius: 8px;
 }
