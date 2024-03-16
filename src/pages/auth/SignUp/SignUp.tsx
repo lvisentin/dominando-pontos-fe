@@ -57,7 +57,7 @@ const SignUp = () => {
   return (
     <div className="flex flex-col h-full">
       <Header />
-      <div className="mx-auto flex flex-col items-center justify-center h-full w-full">
+      <div className="mx-auto flex flex-col items-center justify-center h-full w-full px-8 md:px-0">
         <div className="w-full text-left max-w-md">
           <h1 className="w-full text-left text-lg mb-2 font-bold">Criar conta</h1>
           <h2 className="text-md mb-6">Informe os dados para criar uma conta</h2>
