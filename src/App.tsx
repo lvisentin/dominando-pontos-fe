@@ -5,6 +5,8 @@ import SignUp from './pages/auth/SignUp/SignUp'
 import Dashboard from './pages/Dashboard/Dashboard'
 import InternalLayout from './components/InternalLayout/InternalLayout'
 import Config from './pages/Config/Config'
+import Alerts from './pages/Alerts/Alerts'
+import AlertsCreate from './pages/Alerts/Create'
 import { Toaster } from './components/ui/toaster'
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
         <Route element={<InternalLayout />}>
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/config' element={<Config />} />
+          <Route path='/alerts' element={<Alerts />} />
+          <Route path='/alerts/create' element={<AlertsCreate />} />
         </Route>
 
         <Route path="**" element={<SignIn />} />
