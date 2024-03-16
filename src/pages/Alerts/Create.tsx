@@ -18,39 +18,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-} from "@/components/ui/command"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import LoadingButton from "@/components/LoadingButton/LoadingButton";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { userService } from "@/services/user/UserService";
-import AirportSelect from "@/components/airportSelector/airportSelector";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import AirportSelect from "@/components/AirportSelect/AirportSelect";
+import CabinClassSelect from "@/components/CabinClassSelect/CabinClassSelect";
 
 const Alerts = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const [triggerRef, setTriggerRef] = useState<HTMLButtonElement | null>(null)
 
   const currentDate = new Date().toISOString().split('T')[0];
-
-  const cabinClasses = [
-    { label: 'Economica', value:"economy"},
-    { label: 'Economica Premium', value:"premiumEconomy"},
-    { label: 'Executiva', value:"business"},
-    { label: 'Primeira Classe', value:"first"},
-  ]
 
   const formSchema = z.object({
     departureAirport: z.string().min(3, {
@@ -177,85 +158,16 @@ const Alerts = () => {
                 )}
               />
 
-              {/* <FormField
-                control={form.control}
-                name="cabinClass"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cabine</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione a cabine" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="economy">Economica</SelectItem>
-                        <SelectItem value="premiumEconomy">Economica Premium</SelectItem>
-                        <SelectItem value="business">Executiva</SelectItem>
-                        <SelectItem value="first">Primeira Classe</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
               <FormField
                 control={form.control}
                 name="cabinClass"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Cabine</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild ref={(elementRef) => { 
-                            setTriggerRef(elementRef)
-                        }}>
-                        <Button
-                          variant="outline"
-                          role="select"
-                          className={cn(
-                            "w-full justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value
-                            ? cabinClasses.find(
-                                (cabinClass) => cabinClass.value === field.value
-                              )?.label
-                            : "Selecione a cabine"}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="min-w-[400-px] w-full p-0" style={{
-                        minWidth: triggerRef?.clientWidth ?? 400,
-                        width: triggerRef?.clientWidth ?? undefined,
-                      }}>
-                        <Command>
-                          <CommandGroup className="max-h-[200px] overflow-y-auto">
-                            {cabinClasses.map((cabinClass) => (
-                              <CommandItem
-                                value={cabinClass.label}
-                                key={cabinClass.value}
-                                onSelect={() => {
-                                  form.setValue("cabinClass", cabinClass.value)
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    cabinClass.value === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {cabinClass.label}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <CabinClassSelect
+                      value={field.value}
+                      onSelect={(value) => form.setValue("cabinClass", value)}
+                    />
                     <FormMessage />
                   </FormItem>
                 )}
