@@ -11,6 +11,8 @@ class AuthService {
 
   logout() {
     localStorage.removeItem('authorization');
+    localStorage.removeItem('userData');
+    window.location.reload();
   }
 }
 
