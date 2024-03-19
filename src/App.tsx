@@ -1,15 +1,23 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import './App.css'
-import SignIn from './pages/auth/SignIn/SignIn'
-import SignUp from './pages/auth/SignUp/SignUp'
-import Dashboard from './pages/Dashboard/Dashboard'
 import InternalLayout from './components/InternalLayout/InternalLayout'
-import Config from './pages/Config/Config'
+import { Toaster } from './components/ui/toaster'
 import Alerts from './pages/Alerts/Alerts'
 import AlertsCreate from './pages/Alerts/Create'
-import { Toaster } from './components/ui/toaster'
+import Config from './pages/Config/Config'
+import Dashboard from './pages/Dashboard/Dashboard'
+import SignIn from './pages/auth/SignIn/SignIn'
+import SignUp from './pages/auth/SignUp/SignUp'
 
-function App() {
+const App = () => {
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('authorization')
+
+    if (isLoggedIn && window.location.pathname === '/') {
+      window.location.href = `${import.meta.env.VITE_APP_URL}/config`;
+    }
+  }, [])
 
   return (
     <BrowserRouter>

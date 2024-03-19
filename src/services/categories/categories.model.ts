@@ -6,6 +6,5 @@ export interface Category {
   esferaName: string;
   createdAt: string;
   updatedAt: string;
-  userSavedCategories: Category[];
-  isSaved: boolean;
+  active: boolean;
 }

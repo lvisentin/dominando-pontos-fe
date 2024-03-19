@@ -20,7 +20,10 @@ const Config = () => {
   }
 
   const toggleCategory = (category: Category) => {
-    categoriesService.toggleCategory(category.key).then(() => fetchCategories()).catch(() => toast({ description: 'Ocorreu um erro' }))
+    categoriesService
+    .toggleCategory(category.key)
+    .then(() => fetchCategories())
+    .catch(() => toast({ description: 'Ocorreu um erro' }))
   }
 
   useEffect(() => {
@@ -36,7 +39,7 @@ const Config = () => {
       field: "status",
       name: "Ativo",
       transformData: (data: Category) => {
-        return <Switch checked={data.isSaved} onCheckedChange={() => toggleCategory(data)} />
+        return <Switch checked={data.active} onCheckedChange={() => toggleCategory(data)} />
       }
     },
   ]
