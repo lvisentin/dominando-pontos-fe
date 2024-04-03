@@ -143,7 +143,7 @@ const Alerts = () => {
               <DataTable
                 columns={columns}
                 data={savedDestinations}
-                handleDeleteClick={(alert) => deleteAlert(alert.id)}
+                // handleDeleteClick={(alert) => deleteAlert(alert.id)}
               />
             )
           ) : (
@@ -174,7 +174,7 @@ const Alerts = () => {
               <DataTable
                 columns={fcColumns}
                 data={flightCalendars}
-                handleDeleteClick={(alert) => deleteAlert(alert.id)}
+                // handleDeleteClick={(alert) => deleteAlert(alert.id)}
               />
             )
           ) : (
