@@ -8,11 +8,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { useToast } from "@/components/ui/use-toast";
-import { alertsService } from "@/services/alerts/AlertsService";
-import {
-  FlightCalendar,
-  userService
-} from "@/services/user/UserService";
+import { FlightCalendar, userService } from "@/services/user/UserService";
 import { User } from "@/services/user/user.model";
 import convertDateToGMT3 from "@/shared/utils/convertDateToGMT3";
 import { ChevronsUpDown, Loader2 } from "lucide-react";
@@ -28,15 +24,15 @@ const Alerts = () => {
   const [savedDestinationsOpen, setSavedDestinationsOpen] = useState(false);
   const [flightCalendarsOpen, setFlightCalendarsOpen] = useState(false);
 
-  const deleteAlert = (alertId: number) => {
-    alertsService
-      .deleteSavedDestination(alertId)
-      .then(() => {
-        fetchSavedDestinations();
-        toast({ description: "Alerta deletado com sucesso" });
-      })
-      .catch(() => toast({ description: "Ocorreu um erro" }));
-  };
+  // const deleteAlert = (alertId: number) => {
+  //   alertsService
+  //     .deleteSavedDestination(alertId)
+  //     .then(() => {
+  //       fetchSavedDestinations();
+  //       toast({ description: "Alerta deletado com sucesso" });
+  //     })
+  //     .catch(() => toast({ description: "Ocorreu um erro" }));
+  // };
 
   const fetchSavedDestinations = () => {
     setLoading(true);
