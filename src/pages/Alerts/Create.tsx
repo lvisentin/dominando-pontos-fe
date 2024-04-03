@@ -199,7 +199,15 @@ const Alerts = () => {
               />
             </CardContent>
 
-            <CardFooter className="flex">
+            <CardFooter className="flex flex-col justify-start text-left items-start">
+              {(departureDate?.to || arrivalDate?.to) && (
+                <p className="text-red-500 font-bold text-sm mb-4">
+                  "Você receberá somente alertas da Smiles para esse voo. Para
+                  receber alertas Azul, selecione somente uma data de ida e uma
+                  de volta"
+                </p>
+              )}
+
               <LoadingButton
                 loading={loading}
                 text={"Criar Alerta"}
