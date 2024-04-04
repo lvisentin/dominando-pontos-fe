@@ -63,7 +63,11 @@ class UserService {
   async createFlightCalendar({ departureAirport, arrivalAirport, dates }: CreateFlightCalendarRequest) {
     const authorization = `Bearer ${localStorage.getItem('authorization')}`;
     return await api.post(`/users/flight-calendars`, { departureAirport, arrivalAirport, dates }, { authorization })
+  }
 
+  async createSubscription({ planId }: { planId: number }) {
+    const authorization = `Bearer ${localStorage.getItem('authorization')}`;
+    return await api.post(`/users/subscription`, { planId }, { authorization });
   }
 }
 

@@ -14,44 +14,32 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { authService } from "@/services/auth/AuthService";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { authService } from "@/services/auth/AuthService";
-import { SignInResponse } from "@/services/auth/auth.model";
 
-const SignIn = () => {
+const NewPass = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  // const  = uSEquERY();
   const navigate = useNavigate();
 
   const formSchema = z.object({
-    email: z
-      .string()
-      .min(2, {
-        message: "Por favor, digite seu email",
-      })
-      .email("Por favor, digite um email válido"),
     password: z.string().min(6, {
       message: "Por favor, digite sua senha",
     }),
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  function onSubmit({ email, password }: z.infer<typeof formSchema>) {
+  function onSubmit({ password }: z.infer<typeof formSchema>) {
     setLoading(true);
+    const email = new URLSearchParams(window.location.search).get("email");
+
+    if (!email) return;
+
     authService
-      .signIn({ email, password })
-      .then((r: SignInResponse) => {
-        localStorage.setItem("authorization", r.accessToken);
-        localStorage.setItem("userData", JSON.stringify(r.user));
-        navigate("/config");
+      .updatePassword({ email, password })
+      .then(() => {
+        navigate("/signIn");
       })
       .catch(() => {
         toast({ description: "Email ou senha incorretos" });
@@ -59,16 +47,24 @@ const SignIn = () => {
       .finally(() => setLoading(false));
   }
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      password: "",
+    },
+  });
+
   return (
     <div className="flex flex-col h-full">
       <Header />
       <div className="mx-auto flex flex-col items-center justify-center h-full w-full px-8 md:px-0">
         <div className="w-full text-left max-w-md">
           <h1 className="w-full text-left text-lg mb-2 font-bold">
-            Acessar conta
+            Defina sua senha
           </h1>
           <h2 className="text-md mb-6">
-            Informe os dados para acessar sua conta
+            Você ainda não definiu uma senha para acessar o app, por favor
+            digite sua nova senha.
           </h2>
         </div>
 
@@ -77,20 +73,6 @@ const SignIn = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className=" gap-4 w-full max-w-md flex flex-col"
           >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="text-left">
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Digite seu email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="password"
@@ -124,4 +106,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default NewPass;

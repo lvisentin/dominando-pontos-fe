@@ -27,8 +27,14 @@ class Api {
 
     return await fetch(`${this.BASE_URL}/${endpoint}`,
       { method: 'POST', body: JSON.stringify(body), headers })
-      .then(r => {
+      .then(async r => {
         if (r.status === 401) {
+          const { message } = await r.json();
+          if(message === 'NO_PASSWORD_SET') {
+            window.location.href = `${import.meta.env.VITE_APP_URL}/newPass`;
+            return;
+          }
+
           console.error('Token expirou, por favor faça login novamente!');
           authService.logout();
         }

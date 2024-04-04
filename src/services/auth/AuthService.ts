@@ -9,6 +9,10 @@ class AuthService {
     return await api.post(`auth/signup`, { name, email, password })
   }
 
+  async updatePassword({ email, password }: { email: string, password: string }) {
+    return await api.post(`users/update-password`, { email, password })
+  }
+
   logout() {
     localStorage.removeItem('authorization');
     localStorage.removeItem('userData');

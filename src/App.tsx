@@ -9,6 +9,8 @@ import Config from './pages/Config/Config'
 import Dashboard from './pages/Dashboard/Dashboard'
 import SignIn from './pages/auth/SignIn/SignIn'
 import SignUp from './pages/auth/SignUp/SignUp'
+import NewPass from './pages/auth/NewPass/NewPass'
+import Plans from './pages/Plans/Plans'
 
 const App = () => {
   useEffect(() => {
@@ -27,12 +29,14 @@ const App = () => {
         <Route path="/" element={<SignIn />} />
         <Route path='/signIn' element={<SignIn />} />
         <Route path='/signUp' element={<SignUp />} />
+        <Route path='/newPass' element={<NewPass />} />
 
         <Route element={<InternalLayout />}>
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/config' element={<Config />} />
           <Route path='/alerts' element={<Alerts />} />
           <Route path='/alerts/create' element={<AlertsCreate />} />
+          <Route path='/plans' element={<Plans />} />
         </Route>
 
         <Route path="**" element={<SignIn />} />
