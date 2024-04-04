@@ -13,15 +13,15 @@ export interface Plan {
   description: string;
   price: number;
   benefits: string[];
-  active: boolean;
 }
 
 export interface PlanCardProps {
   selectPlan: (planId: number) => void;
   plan: Plan;
+  active: boolean;
 }
 
-const PlanCard = ({ plan, selectPlan }: PlanCardProps) => {
+const PlanCard = ({ plan, selectPlan, active }: PlanCardProps) => {
   return (
     <Card className=" w-full">
       <CardHeader>
@@ -47,9 +47,9 @@ const PlanCard = ({ plan, selectPlan }: PlanCardProps) => {
         <Button
           onClick={() => selectPlan(plan.id)}
           className="w-full"
-          disabled={plan.active}
+          disabled={active}
         >
-          {plan.active ? "Ativo" : "Assinar"}
+          {active ? "Ativo" : "Assinar"}
         </Button>
       </CardContent>
     </Card>
