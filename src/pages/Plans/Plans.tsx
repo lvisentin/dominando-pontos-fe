@@ -2,6 +2,16 @@ import PlanCard, { Plan } from "@/components/PlanCard/PlanCard";
 import { userService } from "@/services/user/UserService";
 
 const Plans = () => {
+  const sucMsg =
+    new URLSearchParams(window.location.search).get("msg") === "success"
+      ? "Plano Ativo com Sucesso"
+      : undefined;
+
+  const errMsg =
+    new URLSearchParams(window.location.search).get("msg") === "failure"
+      ? "Ocorreu um erro, tente novamente"
+      : undefined;
+
   const activePlan = JSON.parse(localStorage.getItem("userData")!).planId;
   const plans: Plan[] = [
     {
@@ -43,6 +53,9 @@ const Plans = () => {
 
   return (
     <div className="flex flex-col text-left ">
+      {sucMsg && <p className="text-xl font-bold text-green-500 mb-4">{sucMsg}</p>}
+      {errMsg && <p className="text-xl font-bold text-red-500 mb-4">{errMsg}</p>}
+      
       <h1 className="text-base mb-2 font-bold">Minha assinatura</h1>
       <h2 className="text-base mb-4">
         Veja nossos planos e escolha o que melhor se encaixa para você.
