@@ -14,21 +14,25 @@ const Config = () => {
 
   const fetchCategories = () => {
     setLoading(true);
-    categoriesService.listAll().then((r) => {
-      setAllCategories(r)
-    }).catch(() => toast({ description: 'Ocorreu um erro' })).finally(() => setLoading(false))
-  }
+    categoriesService
+      .listAll()
+      .then((r) => {
+        setAllCategories(r);
+      })
+      .catch(() => toast({ description: "Ocorreu um erro" }))
+      .finally(() => setLoading(false));
+  };
 
   const toggleCategory = (category: Category) => {
     categoriesService
-    .toggleCategory(category.key)
-    .then(() => fetchCategories())
-    .catch(() => toast({ description: 'Ocorreu um erro' }))
-  }
+      .toggleCategory(category.key)
+      .then(() => fetchCategories())
+      .catch(() => toast({ description: "Ocorreu um erro" }));
+  };
 
   useEffect(() => {
     fetchCategories();
-  }, [])
+  }, []);
 
   const columns: TableColumn[] = [
     {
@@ -39,19 +43,30 @@ const Config = () => {
       field: "status",
       name: "Ativo",
       transformData: (data: Category) => {
-        return <Switch checked={data.active} onCheckedChange={() => toggleCategory(data)} />
-      }
+        return (
+          <Switch
+            checked={data.active}
+            onCheckedChange={() => toggleCategory(data)}
+          />
+        );
+      },
     },
-  ]
+  ];
 
+  return (
+    <div className="flex flex-col text-left ">
+      <h1 className="text-base mb-2 font-bold">Alertas de promoções</h1>
+      <h2 className="text-base mb-4">
+        Selecione as categorias que você gostaria de receber alertas.
+      </h2>
 
-  return <div className="flex flex-col text-left ">
-    <h1 className="text-base mb-2 font-bold">Alertas de passagens</h1>
-    <h2 className="text-base mb-4">Insira os dados das passagens que você gostaria de receber alertas.</h2>
-
-    {loading ? <Loader2 className="mr-2 h-12 w-12 animate-spin self-center" /> : <DataTable columns={columns} data={allCategories} />}
-
-  </div>
-}
+      {loading ? (
+        <Loader2 className="mr-2 h-12 w-12 animate-spin self-center" />
+      ) : (
+        <DataTable columns={columns} data={allCategories} />
+      )}
+    </div>
+  );
+};
 
 export default Config;

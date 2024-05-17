@@ -106,9 +106,9 @@ const Alerts = () => {
     <div className="flex flex-col text-left w-full">
       <header className="flex item-center justify-between">
         <div className="prose">
-          <h1 className="text-base mb-2 font-bold">Alertas de promoções</h1>
+          <h1 className="text-base mb-2 font-bold">Alertas de passagens</h1>
           <h2 className="text-base mb-4">
-            Selecione as categorias que você gostaria de receber alertas.
+            Insira os dados das passagens que você gostaria de receber alertas.
           </h2>
         </div>
 
