@@ -6,7 +6,7 @@ const Sidebar = () => {
     <ul>
       <SidebarLink icon={faCog} to="/config" label="Configurar alertas" />
       <SidebarLink icon={faPlane} to="/alerts" label="Alertas de passagens" />
-      <SidebarLink icon={faDollarSign} to="/plans" label="Minha Assinatura" />
+      {/* <SidebarLink icon={faDollarSign} to="/plans" label="Minha Assinatura" /> */}
     </ul>
   </aside>
 }
