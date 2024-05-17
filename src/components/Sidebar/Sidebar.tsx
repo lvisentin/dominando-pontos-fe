@@ -1,4 +1,4 @@
-import { faCog, faDollarSign, faPlane } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faPlane } from '@fortawesome/free-solid-svg-icons';
 import SidebarLink from "../SidebarLink/SidebarLink";
 
 const Sidebar = () => {

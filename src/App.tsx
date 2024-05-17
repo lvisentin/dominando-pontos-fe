@@ -7,10 +7,9 @@ import Alerts from './pages/Alerts/Alerts'
 import AlertsCreate from './pages/Alerts/Create'
 import Config from './pages/Config/Config'
 import Dashboard from './pages/Dashboard/Dashboard'
+import NewPass from './pages/auth/NewPass/NewPass'
 import SignIn from './pages/auth/SignIn/SignIn'
 import SignUp from './pages/auth/SignUp/SignUp'
-import NewPass from './pages/auth/NewPass/NewPass'
-import Plans from './pages/Plans/Plans'
 
 const App = () => {
   useEffect(() => {
