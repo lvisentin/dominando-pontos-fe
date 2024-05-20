@@ -15,17 +15,20 @@ export const DateRangeSelect = ({
   date,
   setDate,
   min,
+  disabled,
 }: {
   className?: string;
   date: any;
   setDate: any;
   min: any;
+  disabled: boolean;
 }) => {
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
+            disabled={disabled}
             id="date"
             variant={"outline"}
             className={cn(
@@ -50,6 +53,7 @@ export const DateRangeSelect = ({
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
+            disabled={disabled}
             initialFocus
             mode="range"
             defaultMonth={date?.from}

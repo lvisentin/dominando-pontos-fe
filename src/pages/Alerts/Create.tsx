@@ -165,6 +165,7 @@ const Alerts = () => {
               <div>
                 <FormLabel>Data de Ida</FormLabel>
                 <DateRangeSelect
+                  disabled={false}
                   min={new Date()}
                   date={departureDate}
                   setDate={setDepartureDate}
@@ -174,8 +175,8 @@ const Alerts = () => {
 
               <div>
                 <FormLabel>Data de Volta</FormLabel>
-
                 <DateRangeSelect
+                  disabled={!departureDate?.from}
                   date={arrivalDate}
                   min={departureDate?.from}
                   setDate={setArrivalDate}
