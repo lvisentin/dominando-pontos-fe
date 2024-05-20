@@ -46,6 +46,11 @@ const Alerts = () => {
     to: undefined,
   });
 
+  const changeDepartureDate = (val: any) => {
+    setDepartureDate(val);
+    setArrivalDate({ from: undefined, to: undefined });
+  };
+
   const formSchema = z.object({
     departureAirport: z.string().min(3, {
       message: "Por favor, digite sua origem",
@@ -168,7 +173,7 @@ const Alerts = () => {
                   disabled={false}
                   min={new Date()}
                   date={departureDate}
-                  setDate={setDepartureDate}
+                  setDate={changeDepartureDate}
                   className="w-full mt-2"
                 />
               </div>
