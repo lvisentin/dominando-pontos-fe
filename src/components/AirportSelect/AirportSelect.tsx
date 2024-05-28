@@ -1,11 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandLoading } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { airportsService } from "@/services/airports/AirportsService";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandLoading } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
+import useDebounce from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
+import { airportsService } from "@/services/airports/AirportsService";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 interface AirportSelectProps {
   value: string;
@@ -13,15 +14,18 @@ interface AirportSelectProps {
 }
 
 const AirportSelect = ({ value, onSelect }: AirportSelectProps) => {
+  const { toast } = useToast();
+
   const [loading, setLoading] = useState(false);
   const [airports, setAirports] = useState<{ value: string; label: string; }[]>([]);
-  const { toast } = useToast();
   const [searchInput, setSearchInput] = useState('');
   const [triggerRef, setTriggerRef] = useState<HTMLButtonElement | null>(null)
 
-  const fetchAirports = useCallback(() => {
+  const debouncedInputValue = useDebounce(searchInput, 200)
+
+  const fetchAirports = useCallback((query: string) => {
     setLoading(true);
-    airportsService.getAirports({ search: searchInput })
+    airportsService.getAirports({ search: query })
       .then((res) => {
         const airportsWithOptions = res.map((airport) => ({
           value: airport.code,
@@ -31,21 +35,17 @@ const AirportSelect = ({ value, onSelect }: AirportSelectProps) => {
       })
       .catch(() => toast({ description: 'Ocorreu um erro ao carregar os aeroportos' }))
       .finally(() => setLoading(false));
-  }, [searchInput, toast]);
+  }, [toast]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchAirports();
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [searchInput, fetchAirports]);
+    fetchAirports(debouncedInputValue)
+  }, [debouncedInputValue, fetchAirports]);
 
   return (
     <Popover>
-      <PopoverTrigger asChild ref={(elementRef) => { 
-            setTriggerRef(elementRef)
-        }}>
+      <PopoverTrigger asChild ref={(elementRef) => {
+        setTriggerRef(elementRef)
+      }}>
         <Button
           variant="outline"
           role="combobox"
@@ -64,10 +64,10 @@ const AirportSelect = ({ value, onSelect }: AirportSelectProps) => {
       }}>
         <Command>
           <CommandInput onChangeCapture={(e) => setSearchInput(e.currentTarget.value)} placeholder="Selecione a unidade" />
-          { loading && <CommandLoading>Carregando os aeroportos...</CommandLoading> }
-          { !loading && <CommandEmpty className="pr-2 pl-2">
-            { searchInput.length <= 1 ? 'Digite pelo menos 2 caracteres' : 'Nenhum aeroporto encontrado.'}
-            </CommandEmpty>}
+          {loading && <CommandLoading>Carregando os aeroportos...</CommandLoading>}
+          {!loading && <CommandEmpty className="pr-2 pl-2">
+            {searchInput.length <= 1 ? 'Digite pelo menos 2 caracteres' : 'Nenhum aeroporto encontrado.'}
+          </CommandEmpty>}
           <CommandGroup className="max-h-[200px] overflow-y-auto">
             {airports.map((airport) => (
               <CommandItem
