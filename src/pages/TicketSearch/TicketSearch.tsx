@@ -1,70 +1,108 @@
+import AirportSelect from "@/components/AirportSelect/AirportSelect";
 import DataTable from "@/components/DataTable/DataTable";
-import { TableColumn } from "@/components/DataTable/DataTable.model";
-import { Loader2 } from "lucide-react";
+import { DateRangeSelect } from "@/components/DateRangeSelect/DateRangeSelect";
+import LoadingButton from "@/components/LoadingButton/LoadingButton";
+import { Card, CardContent } from "@/components/ui/card";
+import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { TicketSearchSchema } from "@/shared/schemas/TicketSearch.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { ticketSearchTableColumns, ticketSearchTableData } from "./utils";
 
 const TicketSearch = () => {
   const [loading, setLoading] = useState(false);
 
-  const columns: TableColumn[] = [
-    {
-      field: "origin",
-      name: "Origem",
+  const form = useForm<z.infer<typeof TicketSearchSchema>>({
+    resolver: zodResolver(TicketSearchSchema),
+    defaultValues: {
+      departureAirport: "",
+      arrivalAirport: "",
+      date: new Date(),
     },
-    {
-      field: "destiny",
-      name: "Destino"
-    },
-    {
-      field: "startTime",
-      name: "Data e hora de partida"
-    },
-    {
-      field: "endTime",
-      name: "Data e hora de chegada"
-    },
-    {
-      field: "flyTime",
-      name: "Duração do Voo"
-    },
-    {
-      field: "aerea",
-      name: "Cia aérea"
-    },
-    {
-      field: "cust",
-      name: "Custo "
-    },
-  ];
+  });
 
-  const dataTable = [
-    {
-      origin: 'VCP',
-      destiny: 'GRU',
-      startTime: '12/03 11:43',
-      entTime: '16/03 10:43',
-      flyTime: '3 horas',
-      aerea: 'Azul',
-      cust: 'R$ 1.103,00'
-    }
-  ]
-
-  function teste() {
+  function onSubmit(event: any) {
+    console.log(event)
     setLoading(false)
   }
 
   return (
     <div className="flex flex-col text-left ">
-      <h1 className="text-base mb-2 font-bold">Alertas de promoções</h1>
+      <h1 className="text-base mb-2 font-bold">Busca por passagens</h1>
       <h2 className="text-base mb-4">
-        Selecione as categorias que você gostaria de receber alertas.
+        Busque o destino que você deseja ir e veja as disponibilidades em nosso sistema.
       </h2>
-      <button onClick={teste}>sd</button>
-      {loading ? (
-        <Loader2 className="mr-2 h-12 w-12 animate-spin self-center" />
-      ) : (
-        <DataTable columns={columns} data={dataTable} />
-      )}
+
+      <Card className="pt-6 mb-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+            <CardContent className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-end">
+              <FormField
+                control={form.control}
+                name="departureAirport"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="pb-1">Origem</FormLabel>
+                    <AirportSelect
+                      value={field.value}
+                      onSelect={(value) =>
+                        form.setValue("departureAirport", value)
+                      }
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="arrivalAirport"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="pb-1">Destino</FormLabel>
+                    <AirportSelect
+                      value={field.value}
+                      onSelect={(value) =>
+                        form.setValue("arrivalAirport", value)
+                      }
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="pb-1">Data</FormLabel>
+                    <DateRangeSelect
+                      disabled={false}
+                      min={new Date()}
+                      date={field.value}
+                      setDate={(date: any) => form.setValue('date', date)}
+                      mode="single"
+                      className="w-full mt-2"
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <LoadingButton
+                loading={loading}
+                text="Buscar"
+                type="submit"
+              />
+            </CardContent>
+          </form>
+        </Form>
+      </Card>
+
+      <DataTable columns={ticketSearchTableColumns} data={ticketSearchTableData} />
     </div>
   );
 };
