@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
+import { getArrayOfDates } from "@/lib/utils";
 import {
   CreateFlightCalendarRequest,
   CreateSavedDestinationsRequest,
@@ -30,7 +31,6 @@ import {
 } from "@/services/user/UserService";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
-import { getArrayOfDates } from "@/lib/utils";
 
 const Alerts = () => {
   const [loading, setLoading] = useState(false);
@@ -103,7 +103,7 @@ const Alerts = () => {
 
     return userService
       .createSavedDestinations(payload)
-      .then(() => toast({ description: "Alerta cadastrado com sucesso!" }))
+      .then(() => toast({ description: "Alerta cadastrado com sucesso!", variant: 'success' }))
       .catch(() => toast({ description: "Campos inválidos" }))
       .finally(() => setLoading(false));
   }

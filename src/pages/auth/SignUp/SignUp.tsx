@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { authService } from "@/services/auth/AuthService"
 import { SignUpResponse } from "@/services/auth/auth.model"
+import { handleFetchErrorMessage } from "@/shared/utils/errors/handleFetchErrorMessage"
 import { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 
@@ -51,7 +52,9 @@ const SignUp = () => {
       localStorage.setItem('authorization', r.accessToken)
       localStorage.setItem('userData', JSON.stringify(r.user))
       navigate('/config')
-    }).catch(() => toast({ description: 'Email ou senha incorretos' })).finally(() => setLoading(false))
+    })
+      .catch((err) => toast({ description: handleFetchErrorMessage(err.message).message }))
+      .finally(() => setLoading(false))
   }
 
   return (

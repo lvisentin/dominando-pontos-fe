@@ -64,7 +64,7 @@ const AirportSelect = ({ value, onSelect }: AirportSelectProps) => {
       }}>
         <Command>
           <CommandInput onChangeCapture={(e) => setSearchInput(e.currentTarget.value)} placeholder="Selecione a unidade" />
-          {loading && <CommandLoading>Carregando os aeroportos...</CommandLoading>}
+          {loading && <CommandLoading className="pr-2 pl-2">Carregando os aeroportos...</CommandLoading>}
           {!loading && <CommandEmpty className="pr-2 pl-2">
             {searchInput.length <= 1 ? 'Digite pelo menos 2 caracteres' : 'Nenhum aeroporto encontrado.'}
           </CommandEmpty>}
