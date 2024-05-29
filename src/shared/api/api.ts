@@ -28,9 +28,12 @@ class Api {
     return await fetch(`${this.BASE_URL}/${endpoint}`,
       { method: 'POST', body: JSON.stringify(body), headers })
       .then(async r => {
-        if (r.status === 401) {
+        const fetchFromSigninPath = r.url.split('/').includes('signin')
+
+        if (r.status === 401 && !fetchFromSigninPath) {
           const { message } = await r.json();
-          if(message === 'NO_PASSWORD_SET') {
+
+          if (message === 'NO_PASSWORD_SET') {
             window.location.href = `${import.meta.env.VITE_APP_URL}/newPass`;
             return;
           }
