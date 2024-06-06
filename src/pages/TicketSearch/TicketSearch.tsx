@@ -9,10 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ticketSearchTableColumns, ticketSearchTableData } from "./utils";
+import { ticketSearchTableColumns } from "./utils";
+import { flightsService } from "@/services/Flights/FlightsService";
+import { convertDateWithHours } from "@/shared/utils/convertDateWithHours";
 
 const TicketSearch = () => {
   const [loading, setLoading] = useState(false);
+  const [flights, setFlights] = useState([])
 
   const form = useForm<z.infer<typeof TicketSearchSchema>>({
     resolver: zodResolver(TicketSearchSchema),
@@ -23,8 +26,20 @@ const TicketSearch = () => {
     },
   });
 
-  function onSubmit(event: any) {
-    console.log(event)
+  async function onSubmit(event: any) {
+    setLoading(true)
+
+    const result = await flightsService.getFlights({
+      ...event,
+      departureDate: event.date.toISOString().split('T')[0]
+    })
+    
+    setFlights(result.map((flight: any) => ({
+      ...flight,
+      departureDate: convertDateWithHours(flight.departureDate),
+      arrivalDate: convertDateWithHours(flight.arrivalDate)
+    })))
+
     setLoading(false)
   }
 
@@ -102,7 +117,7 @@ const TicketSearch = () => {
         </Form>
       </Card>
 
-      <DataTable columns={ticketSearchTableColumns} data={ticketSearchTableData} />
+      <DataTable columns={ticketSearchTableColumns} data={flights}/>
     </div>
   );
 };

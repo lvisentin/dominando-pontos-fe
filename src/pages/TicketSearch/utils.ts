@@ -2,43 +2,43 @@ import { TableColumn } from "@/components/DataTable/DataTable.model";
 
 export const ticketSearchTableColumns: TableColumn[] = [
   {
-    field: "origin",
+    field: "departureAirport",
     name: "Origem",
   },
   {
-    field: "destiny",
+    field: "arrivalAirport",
     name: "Destino"
   },
   {
-    field: "startTime",
+    field: "departureDate",
     name: "Data e hora de partida"
   },
   {
-    field: "endTime",
+    field: "arrivalDate",
     name: "Data e hora de chegada"
   },
   {
-    field: "flyTime",
+    field: "duration",
     name: "Duração do Voo"
   },
   {
-    field: "aerea",
+    field: "airline",
     name: "Cia aérea"
   },
   {
-    field: "cust",
+    field: "price",
     name: "Custo "
   },
 ];
 
 export const ticketSearchTableData = [
   {
-    origin: 'VCP',
-    destiny: 'GRU',
-    startTime: '12/03 11:43',
-    endTime: '16/03 10:43',
-    flyTime: '3 horas',
-    aerea: 'Azul',
-    cust: 'R$ 1.103,00'
+    departureAirport: 'VCP',
+    arrivalAirport: 'GRU',
+    departureDate: '12/03 11:43',
+    arrivalDate: '16/03 10:43',
+    duration: '3 horas',
+    airline: 'Azul',
+    price: 'R$ 1.103,00'
   }
 ]
