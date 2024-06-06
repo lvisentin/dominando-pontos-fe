@@ -67,9 +67,8 @@ const Alerts = () => {
       field: "departureAirport",
       name: "Detalhes",
       transformData: (row) => {
-        return `${row.departureAirport} ➡️ ${
-          row.arrivalAirport
-        } em ${convertDateToGMT3(row.departureDate)}`;
+        return `${row.departureAirport} ➡️ ${row.arrivalAirport
+          } em ${convertDateToGMT3(row.departureDate)}`;
       },
     },
     {
@@ -86,11 +85,10 @@ const Alerts = () => {
       field: "departureAirport",
       name: "Detalhes",
       transformData: (row) => {
-        return `${row.departureAirport} ➡️ ${
-          row.arrivalAirport
-        } em ${row.userSavedDestinations
-          .map((usd: any) => convertDateToGMT3(usd.departureDate))
-          .join(", ")}`;
+        return `${row.departureAirport} ➡️ ${row.arrivalAirport
+          } em ${row.userSavedDestinations
+            .map((usd: any) => convertDateToGMT3(usd.departureDate))
+            .join(", ")}`;
       },
     },
     {
@@ -123,7 +121,7 @@ const Alerts = () => {
         className="space-y-2"
       >
         <div className="flex items-center justify-between space-x-4 px-4 bg-white rounded-lg p-4">
-          <h4 className="text-sm font-semibold">Alertas de vôo</h4>
+          <h4 className="text-sm font-semibold">Alertas de voo</h4>
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="sm" className="w-9 p-0">
               <ChevronsUpDown className="h-4 w-4" />
@@ -139,7 +137,7 @@ const Alerts = () => {
               <DataTable
                 columns={columns}
                 data={savedDestinations}
-                // handleDeleteClick={(alert) => deleteAlert(alert.id)}
+              // handleDeleteClick={(alert) => deleteAlert(alert.id)}
               />
             )
           ) : (
@@ -170,7 +168,7 @@ const Alerts = () => {
               <DataTable
                 columns={fcColumns}
                 data={flightCalendars}
-                // handleDeleteClick={(alert) => deleteAlert(alert.id)}
+              // handleDeleteClick={(alert) => deleteAlert(alert.id)}
               />
             )
           ) : (
