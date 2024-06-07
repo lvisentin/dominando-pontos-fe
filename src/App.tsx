@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import NewPass from './pages/auth/NewPass/NewPass'
 import SignIn from './pages/auth/SignIn/SignIn'
 import SignUp from './pages/auth/SignUp/SignUp'
+import TicketSearch from './pages/TicketSearch/TicketSearch'
 
 const App = () => {
   useEffect(() => {
@@ -35,6 +36,7 @@ const App = () => {
           <Route path='/config' element={<Config />} />
           <Route path='/alerts' element={<Alerts />} />
           <Route path='/alerts/create' element={<AlertsCreate />} />
+          <Route path='/ticket-search' element={<TicketSearch />} />
           {/* <Route path='/plans' element={<Plans />} /> */}
         </Route>
 

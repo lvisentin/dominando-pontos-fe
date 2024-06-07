@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { formatSelectedRangeDate } from "./utils";
+
+type DateRangeSelect = {
+  className?: string;
+  date: any;
+  setDate: any;
+  min: any;
+  disabled: boolean;
+  mode?: "default" | "multiple" | "single" | "range"
+}
 
 export const DateRangeSelect = ({
   className,
@@ -16,13 +25,8 @@ export const DateRangeSelect = ({
   setDate,
   min,
   disabled,
-}: {
-  className?: string;
-  date: any;
-  setDate: any;
-  min: any;
-  disabled: boolean;
-}) => {
+  mode = "range"
+}: DateRangeSelect) => {
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -37,25 +41,15 @@ export const DateRangeSelect = ({
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
-              ) : (
-                format(date.from, "LLL dd, y")
-              )
-            ) : (
-              <span>Pick a date</span>
-            )}
+
+            {formatSelectedRangeDate({ date, mode })}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             disabled={disabled}
             initialFocus
-            mode="range"
+            mode={mode}
             defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
