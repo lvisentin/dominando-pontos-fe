@@ -15,8 +15,8 @@ const CabinClassSelect = ({ value, onSelect }: CabinClassSelectProps) => {
 
   const cabinClasses = [
     { label: 'Todas', value: "all"},
-    { label: 'Economica', value:"economy"},
-    { label: 'Economica Premium', value:"premiumEconomy"},
+    { label: 'Econômica', value:"economy"},
+    { label: 'Econômica Premium', value:"premiumEconomy"},
     { label: 'Executiva', value:"business"},
     { label: 'Primeira Classe', value:"first"},
   ]
