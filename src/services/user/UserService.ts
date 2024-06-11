@@ -4,7 +4,7 @@ import { User } from "./user.model";
 export interface CreateFlightRequest {
   departureAirport: string;
   arrivalAirport: string;
-  cabinClass?: string;
+  cabinClass?: string | null;
 }
 
 export interface CreateSavedDestinationsRequest extends CreateFlightRequest {
