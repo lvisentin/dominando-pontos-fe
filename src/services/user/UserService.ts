@@ -8,7 +8,7 @@ export interface CreateFlightRequest {
 }
 
 export interface CreateSavedDestinationsRequest extends CreateFlightRequest {
-  arrivalDate: string;
+  arrivalDate: string | null;
   departureDate: string;
 }
 

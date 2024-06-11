@@ -98,7 +98,7 @@ const Alerts = () => {
     const payload: CreateSavedDestinationsRequest = {
       ...values,
       departureDate: departureDate?.from?.toISOString()!,
-      arrivalDate: arrivalDate?.from?.toISOString()!,
+      arrivalDate: arrivalDate?.from ? arrivalDate?.from?.toISOString() : null,
     };
 
     return userService
