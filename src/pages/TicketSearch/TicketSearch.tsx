@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { TicketSearchSchema } from "@/shared/schemas/TicketSearch.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ticketSearchTableColumns } from "./utils";
@@ -16,6 +16,20 @@ import { convertDateWithHours } from "@/shared/utils/convertDateWithHours";
 const TicketSearch = () => {
   const [loading, setLoading] = useState(false);
   const [flights, setFlights] = useState([])
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await flightsService.getAllFlights()
+      
+      setFlights(result.map((flight: any) => ({
+        ...flight,
+        departureDate: convertDateWithHours(flight.departureDate),
+        arrivalDate: convertDateWithHours(flight.arrivalDate)
+      })))
+    }
+
+    fetchData()
+  }, [])
 
   const form = useForm<z.infer<typeof TicketSearchSchema>>({
     resolver: zodResolver(TicketSearchSchema),
