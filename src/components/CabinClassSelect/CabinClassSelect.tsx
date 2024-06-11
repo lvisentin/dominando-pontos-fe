@@ -14,6 +14,7 @@ const CabinClassSelect = ({ value, onSelect }: CabinClassSelectProps) => {
   const [triggerRef, setTriggerRef] = useState<HTMLButtonElement | null>(null)
 
   const cabinClasses = [
+    { label: 'Todas', value: "all"},
     { label: 'Econômica', value:"economy"},
     { label: 'Econômica Premium', value:"premiumEconomy"},
     { label: 'Executiva', value:"business"},

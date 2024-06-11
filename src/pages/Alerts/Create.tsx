@@ -82,6 +82,7 @@ const Alerts = () => {
 
       const payload: CreateFlightCalendarRequest = {
         ...values,
+        cabinClass: values.cabinClass === 'all' ? null : values.cabinClass,
         dates: {
           departureDates,
           returnDates,
@@ -97,6 +98,7 @@ const Alerts = () => {
 
     const payload: CreateSavedDestinationsRequest = {
       ...values,
+      cabinClass: values.cabinClass === 'all' ? null : values.cabinClass,
       departureDate: departureDate?.from?.toISOString()!,
       arrivalDate: arrivalDate?.from ? arrivalDate?.from?.toISOString() : null,
     };
