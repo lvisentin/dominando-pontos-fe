@@ -7,12 +7,17 @@ type Flight = {
 }
 
 class FlightsService {
-  async getFlights({ departureAirport, arrivalAirport, departureDate }: Flight) {
+  async getFlights({ departureAirport , arrivalAirport  , departureDate }: Flight) {
     const authorization = `Bearer ${localStorage.getItem('authorization')}`;
     return await api.get(
       `flights?departureAirport=${departureAirport}&arrivalAirport=${arrivalAirport}&departureDate=${departureDate}&limit=100&page=1`,
       { authorization }
     )
+  }
+
+  async getAllFlights() {
+    const authorization = `Bearer ${localStorage.getItem('authorization')}`;
+    return await api.get(`flights?&limit=100`, { authorization } )
   }
 }
 
