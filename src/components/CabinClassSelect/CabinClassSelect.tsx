@@ -20,6 +20,11 @@ const CabinClassSelect = ({ value, onSelect }: CabinClassSelectProps) => {
     { label: 'Primeira Classe', value:"first"},
   ]
 
+  const handleSelectCabin = (cabin: string) => {
+    onSelect(cabin)
+    triggerRef?.click()
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild ref={(elementRef) => { 
@@ -51,7 +56,7 @@ const CabinClassSelect = ({ value, onSelect }: CabinClassSelectProps) => {
               <CommandItem
                 value={cabinClass.label}
                 key={cabinClass.value}
-                onSelect={() => onSelect(cabinClass.value)}
+                onSelect={() => handleSelectCabin(cabinClass.value)}
               >
                 <Check
                   className={cn(

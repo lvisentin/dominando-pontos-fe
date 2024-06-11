@@ -37,6 +37,11 @@ const AirportSelect = ({ value, onSelect }: AirportSelectProps) => {
       .finally(() => setLoading(false));
   }, [toast]);
 
+  const handleSelectedAirport = (airport: string) => {
+    onSelect(airport)
+    triggerRef?.click()
+  }
+
   useEffect(() => {
     fetchAirports(debouncedInputValue)
   }, [debouncedInputValue, fetchAirports]);
@@ -73,7 +78,7 @@ const AirportSelect = ({ value, onSelect }: AirportSelectProps) => {
               <CommandItem
                 value={airport.label}
                 key={airport.value}
-                onSelect={() => onSelect(airport.value)}
+                onSelect={() => handleSelectedAirport(airport.value)}
               >
                 <Check
                   className={cn(
