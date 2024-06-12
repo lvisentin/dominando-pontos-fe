@@ -91,7 +91,7 @@ const Alerts = () => {
 
       return userService
         .createFlightCalendar(payload)
-        .then(() => toast({ description: "Alerta cadastrado com sucesso!" }))
+        .then(() => toast({ description: "Alerta cadastrado com sucesso!", variant: 'success' }))
         .catch(() => toast({ description: "Campos inválidos" }))
         .finally(() => setLoading(false));
     }
