@@ -15,21 +15,28 @@ import { convertDateWithHours } from "@/shared/utils/convertDateWithHours";
 
 const TicketSearch = () => {
   const [loading, setLoading] = useState(false);
-  const [flights, setFlights] = useState([])
+  const [flights, setFlights] = useState([]);
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  const fetchData = async () => {
+    const result = await flightsService.getAllFlights({ limit, page })
+
+    setFlights(result.map((flight: any) => ({
+      ...flight,
+      departureDate: convertDateWithHours(flight.departureDate),
+      arrivalDate: convertDateWithHours(flight.arrivalDate)
+    })))
+  }
+  
+  useEffect(() => {
+    console.log(flights.length
+    )
+  }, [flights])
 
   useEffect(() => {
-    async function fetchData() {
-      const result = await flightsService.getAllFlights()
-      
-      setFlights(result.map((flight: any) => ({
-        ...flight,
-        departureDate: convertDateWithHours(flight.departureDate),
-        arrivalDate: convertDateWithHours(flight.arrivalDate)
-      })))
-    }
-
     fetchData()
-  }, [])
+  }, [page])
 
   const form = useForm<z.infer<typeof TicketSearchSchema>>({
     resolver: zodResolver(TicketSearchSchema),
@@ -42,12 +49,15 @@ const TicketSearch = () => {
 
   async function onSubmit(event: any) {
     setLoading(true)
+    setPage(1)
 
     const result = await flightsService.getFlights({
       ...event,
-      departureDate: event.date.toISOString().split('T')[0]
+      departureDate: event.date.toISOString().split('T')[0],
+      page: 1,
+      limit,
     })
-    
+
     setFlights(result.map((flight: any) => ({
       ...flight,
       departureDate: convertDateWithHours(flight.departureDate),
@@ -131,7 +141,7 @@ const TicketSearch = () => {
         </Form>
       </Card>
 
-      <DataTable columns={ticketSearchTableColumns} data={flights}/>
+      <DataTable page={page} limit={limit} setPage={setPage} pagination={true} columns={ticketSearchTableColumns} data={flights} />
     </div>
   );
 };

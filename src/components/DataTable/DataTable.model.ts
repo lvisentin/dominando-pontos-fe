@@ -13,6 +13,11 @@ export interface DataTableProps {
   header?: ReactElement;
   footer?: ReactElement;
   actions?: RowAction[];
+  limit?: number;
+  page?: number;
+  totalPages?: number;
+  pagination?: boolean;
+  setPage?: (page: number) => any;
 }
 
 export interface RowAction {

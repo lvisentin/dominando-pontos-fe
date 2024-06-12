@@ -1,5 +1,6 @@
 import DataTable from "@/components/DataTable/DataTable";
 import { TableColumn } from "@/components/DataTable/DataTable.model";
+import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import { categoriesService } from "@/services/categories/CategoriesService";

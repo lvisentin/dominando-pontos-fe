@@ -1,8 +1,11 @@
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DeleteButton from '../DeleteButton/DeleteButton';
+import { Button } from '../ui/button';
 import { DataTableProps } from './DataTable.model';
 import styles from './DataTable.module.css';
 import Swal from 'sweetalert2';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function DataTable({
   data,
@@ -10,6 +13,9 @@ export default function DataTable({
   handleDeleteClick,
   header,
   footer,
+  page,
+  setPage,
+  pagination = false,
 }: DataTableProps) {
   const rowClasses = `text-sm md:text-md pr-0 py-4 pl-4 md:py-4 md:pl-8`
 
@@ -28,6 +34,12 @@ export default function DataTable({
         handleDeleteClick(row);
       }
     });
+  }
+
+  const changePage = (page: number) => {
+    if (setPage) {
+      setPage(page);
+    }
   }
 
   return (
@@ -94,6 +106,20 @@ export default function DataTable({
         </tbody>
       </table>
       {data?.length == 0 && <div className="w-full text-center my-12">Não encontramos nenhum registro.</div>}
+
+
+      <div>
+        {
+          pagination && (
+            <div className='flex gap-4 text-center justify-center items-center mt-4 px-4 overflow-x-auto overflow-hidden'>
+
+
+              <Button onClick={() => changePage(page! - 1)} className={`bg-primary text-white border-2 rounded-md `}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+              <Button onClick={() => changePage(page! + 1)} className={`bg-primary text-white border-2 rounded-md `}><FontAwesomeIcon icon={faArrowRight} /></Button>
+
+            </div>
+          )}
+      </div>
 
       <footer className="tableFooter">{footer && footer}</footer>
     </div>
