@@ -8,6 +8,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { useToast } from "@/components/ui/use-toast";
+import { alertsService } from "@/services/alerts/AlertsService";
 import { FlightCalendar, userService } from "@/services/user/UserService";
 import { User } from "@/services/user/user.model";
 import convertDateToGMT3 from "@/shared/utils/convertDateToGMT3";
@@ -24,15 +25,25 @@ const Alerts = () => {
   const [savedDestinationsOpen, setSavedDestinationsOpen] = useState(false);
   const [flightCalendarsOpen, setFlightCalendarsOpen] = useState(false);
 
-  // const deleteAlert = (alertId: number) => {
-  //   alertsService
-  //     .deleteSavedDestination(alertId)
-  //     .then(() => {
-  //       fetchSavedDestinations();
-  //       toast({ description: "Alerta deletado com sucesso" });
-  //     })
-  //     .catch(() => toast({ description: "Ocorreu um erro" }));
-  // };
+  const deleteSavedDestination = (alertId: number) => {
+    alertsService
+      .deleteSavedDestination(alertId)
+      .then(() => {
+        fetchSavedDestinations();
+        toast({ description: "Alerta deletado com sucesso" });
+      })
+      .catch(() => toast({ description: "Ocorreu um erro" }));
+  };
+
+  const deleteFlightsCalendar = (alertId: number) => {
+    alertsService
+      .deleteFlightCalendar(alertId)
+      .then(() => {
+        fetchFlightCalendars();
+        toast({ description: "Alerta deletado com sucesso" });
+      })
+      .catch(() => toast({ description: "Ocorreu um erro" }));
+  }
 
   const fetchSavedDestinations = () => {
     setLoading(true);
@@ -42,7 +53,7 @@ const Alerts = () => {
         console.log("savedDestinations", r);
         setSavedDestinations(r);
       })
-      .catch(() => toast({ description: "Ocorreu um erro" }))
+      .catch(() => toast({ description: "Ocorreu um erro fetch" }))
       .finally(() => setLoading(false));
   };
 
@@ -137,7 +148,7 @@ const Alerts = () => {
               <DataTable
                 columns={columns}
                 data={savedDestinations}
-              // handleDeleteClick={(alert) => deleteAlert(alert.id)}
+                handleDeleteClick={(alert) => deleteSavedDestination(alert.id)}
               />
             )
           ) : (
@@ -168,7 +179,7 @@ const Alerts = () => {
               <DataTable
                 columns={fcColumns}
                 data={flightCalendars}
-              // handleDeleteClick={(alert) => deleteAlert(alert.id)}
+                handleDeleteClick={(alert) => deleteFlightsCalendar(alert.id)}
               />
             )
           ) : (

@@ -45,7 +45,7 @@ class Api {
         if (!r.ok) {
           return r.json().then((e) => { throw e })
         }
-
+  
         return r.json()
       })
   }
@@ -53,7 +53,7 @@ class Api {
   async delete(endpoint: string, headers = {}) {
     return await fetch(`${this.BASE_URL}/${endpoint}`,
       { method: 'DELETE', headers })
-      .then(r => {
+      .then(async r => {
         if (r.status === 401) {
           console.error('Token expirou, por favor faça login novamente!');
           authService.logout();
@@ -63,7 +63,7 @@ class Api {
           return r.json().then((e) => { throw e })
         }
 
-        return r.json()
+        return r
       })
   }
 }
