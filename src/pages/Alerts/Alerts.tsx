@@ -12,16 +12,17 @@ import { alertsService } from "@/services/alerts/AlertsService";
 import { FlightCalendar, userService } from "@/services/user/UserService";
 import { User } from "@/services/user/user.model";
 import convertDateToGMT3 from "@/shared/utils/convertDateToGMT3";
+import { errorMessages } from "@/shared/utils/errorMessages";
 import { ChevronsUpDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Alerts = () => {
   const [loading, setLoading] = useState(false);
   const [savedDestinations, setSavedDestinations] = useState<User[]>([]);
   const [flightCalendars, setFlightCalendars] = useState<FlightCalendar[]>([]);
   const { toast } = useToast();
-
+  const navigate = useNavigate();
   const [savedDestinationsOpen, setSavedDestinationsOpen] = useState(false);
   const [flightCalendarsOpen, setFlightCalendarsOpen] = useState(false);
 
@@ -64,7 +65,11 @@ const Alerts = () => {
       .then((r) => {
         setFlightCalendars(r);
       })
-      .catch(() => toast({ description: "Ocorreu um erro" }))
+      .catch((err) => {
+        if (err.message === errorMessages.UNSUBSCRIBED_USER) {
+          navigate('/plans');
+        }
+      })
       .finally(() => setLoading(false));
   };
 

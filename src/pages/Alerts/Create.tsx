@@ -95,8 +95,11 @@ const Alerts = () => {
         .createFlightCalendar(payload)
         .then(() => toast({ description: "Alerta cadastrado com sucesso!", variant: 'success' }))
         .catch((err) => {
-          if (err.message === errorMessages.UNSUBSCRIBED_USER) {
-            navigate('/plans');
+          if (err.message === "UNSUBSCRIBED_USER") {
+            toast({ description: errorMessages.UNSUBSCRIBED_USER })
+          }
+          if (err.message === "CALENDAR_EXCEEDED") {
+            toast({ description: errorMessages.CALENDAR_EXCEEDED })
           }
         })
         .finally(() => setLoading(false));
@@ -112,7 +115,14 @@ const Alerts = () => {
     return userService
       .createSavedDestinations(payload)
       .then(() => toast({ description: "Alerta cadastrado com sucesso!", variant: 'success' }))
-      .catch(() => toast({ description: "Campos inválidos" }))
+      .catch((err) => {
+        if (err.message === "UNSUBSCRIBED_USER") {
+          toast({ description: errorMessages.UNSUBSCRIBED_USER })
+        }
+        if (err.message === "LEGS_EXCEEDED") {
+          toast({ description: errorMessages.LEGS_EXCEEDED })
+        }
+      })
       .finally(() => setLoading(false));
   }
 
