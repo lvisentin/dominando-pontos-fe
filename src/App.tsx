@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import './App.css'
 import InternalLayout from './components/InternalLayout/InternalLayout'
 import { Toaster } from './components/ui/toaster'

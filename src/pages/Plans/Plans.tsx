@@ -1,9 +1,19 @@
 import PlanCard, { Plan } from "@/components/PlanCard/PlanCard";
 import { userService } from "@/services/user/UserService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Plans = () => {
   const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('authorization')
+console.log(isLoggedIn)
+    if (!isLoggedIn) {
+      console.log('here')
+      window.location.href = `${import.meta.env.VITE_APP_URL}`;
+    }
+  }, [])
+
 
   const sucMsg =
     new URLSearchParams(window.location.search).get("msg") === "success"
@@ -15,7 +25,7 @@ const Plans = () => {
       ? "Ocorreu um erro, tente novamente"
       : undefined;
 
-  const activePlan = JSON.parse(localStorage.getItem("userData")!).planId;
+  const activePlan =localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")!).planId : undefined;
   const plans: Plan[] = [
     {
       id: 7,
@@ -44,12 +54,12 @@ const Plans = () => {
   const onSelectPlan = (planId: number) => {
     console.log("planId", planId);
     setLoading(true);
-    
-    if(activePlan) {
-      window.location.href =  'https://api.whatsapp.com/send?phone=554192562255&text=Ol%C3%A1,%20gostaria%20de%20fazer%20mudan%C3%A7a%20no%20meu%20plano%20do%20app%20Dominando%20Pontos';
+
+    if (activePlan) {
+      window.location.href = 'https://api.whatsapp.com/send?phone=554192562255&text=Ol%C3%A1,%20gostaria%20de%20fazer%20mudan%C3%A7a%20no%20meu%20plano%20do%20app%20Dominando%20Pontos';
       return;
     }
-    
+
     userService
       .createSubscription({ planId })
       .then((r) => {
