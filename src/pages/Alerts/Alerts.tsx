@@ -12,7 +12,6 @@ import { alertsService } from "@/services/alerts/AlertsService";
 import { FlightCalendar, userService } from "@/services/user/UserService";
 import { User } from "@/services/user/user.model";
 import convertDateToGMT3 from "@/shared/utils/convertDateToGMT3";
-import { errorMessages } from "@/shared/utils/errorMessages";
 import { ChevronsUpDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
