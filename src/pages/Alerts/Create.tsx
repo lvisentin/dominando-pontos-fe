@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import AirportSelect from "@/components/AirportSelect/AirportSelect";
@@ -31,10 +31,12 @@ import {
 } from "@/services/user/UserService";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
+import { errorMessages } from "@/shared/utils/errorMessages";
 
 const Alerts = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const [departureDate, setDepartureDate] = useState<DateRange | undefined>({
     from: undefined,
@@ -92,7 +94,11 @@ const Alerts = () => {
       return userService
         .createFlightCalendar(payload)
         .then(() => toast({ description: "Alerta cadastrado com sucesso!", variant: 'success' }))
-        .catch(() => toast({ description: "Campos inválidos" }))
+        .catch((err) => {
+          if (err.message === errorMessages.UNSUBSCRIBED_USER) {
+            navigate('/plans');
+          }
+        })
         .finally(() => setLoading(false));
     }
 
