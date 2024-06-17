@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import InternalLayout from './components/InternalLayout/InternalLayout'
 import { Toaster } from './components/ui/toaster'
@@ -7,11 +7,11 @@ import Alerts from './pages/Alerts/Alerts'
 import AlertsCreate from './pages/Alerts/Create'
 import Config from './pages/Config/Config'
 import Dashboard from './pages/Dashboard/Dashboard'
+import Plans from './pages/Plans/Plans'
+import TicketSearch from './pages/TicketSearch/TicketSearch'
 import NewPass from './pages/auth/NewPass/NewPass'
 import SignIn from './pages/auth/SignIn/SignIn'
 import SignUp from './pages/auth/SignUp/SignUp'
-import TicketSearch from './pages/TicketSearch/TicketSearch'
-import Plans from './pages/Plans/Plans'
 
 const App = () => {
   useEffect(() => {
