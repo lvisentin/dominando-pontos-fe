@@ -74,6 +74,8 @@ const Alerts = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    
     if (departureDate?.to || arrivalDate?.to) {
       const departureDates = getArrayOfDates(
         departureDate?.from,
