@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 
 export interface Plan {
   id: number;
@@ -19,11 +20,12 @@ export interface PlanCardProps {
   selectPlan: (planId: number) => void;
   plan: Plan;
   active: boolean;
+  loading: boolean;
 }
 
-const PlanCard = ({ plan, selectPlan, active }: PlanCardProps) => {
+const PlanCard = ({ plan, selectPlan, active, loading }: PlanCardProps) => {
   return (
-    <Card className=" w-full">
+    <Card className=" w-full flex flex-col justify-between">
       <CardHeader>
         <CardTitle>{plan.name}</CardTitle>
         <CardDescription>{plan.description}</CardDescription>
@@ -33,9 +35,9 @@ const PlanCard = ({ plan, selectPlan, active }: PlanCardProps) => {
           {plan.price.toLocaleString("pt-BR", {
             style: "currency",
             currency: "BRL",
-          })}
+          })}/mês
         </h1>
-
+          
         <ul className="list-disc mb-4 pl-4">
           {plan.benefits.map((benefit, index) => (
             <li key={index}>
@@ -46,10 +48,11 @@ const PlanCard = ({ plan, selectPlan, active }: PlanCardProps) => {
 
         <Button
           onClick={() => selectPlan(plan.id)}
-          className="w-full"
-          disabled={active}
+          className={`w-full ${loading && 'bg-white border border-primary'}`}
+          disabled={active || loading}
         >
-          {active ? "Ativo" : "Assinar"}
+          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            : (active ? "Ativo" : "Assinar")}
         </Button>
       </CardContent>
     </Card>

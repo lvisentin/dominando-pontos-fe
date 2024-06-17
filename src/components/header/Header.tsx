@@ -2,12 +2,16 @@ import { User } from "@/services/auth/auth.model";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from './header.module.css'
+import { useNavigate } from "react-router-dom";
 
 const LoggedInHeader = ({ user }: { user: User }) => {
+  const navigate = useNavigate();
+
   const logout = () => {
     localStorage.removeItem('authorization');
     localStorage.removeItem('userData');
     window.location.reload();
+    navigate("/signIn");
   }
 
   return <header className="px-6 flex items-center justify-between w-full bg-primary text-white font-bold py-4">
