@@ -36,7 +36,6 @@ import { errorMessages } from "@/shared/utils/errorMessages";
 const Alerts = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const [departureDate, setDepartureDate] = useState<DateRange | undefined>({
     from: undefined,
