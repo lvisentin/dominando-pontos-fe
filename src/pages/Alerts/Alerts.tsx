@@ -54,8 +54,11 @@ const Alerts = () => {
         console.log("savedDestinations", r);
         setSavedDestinations(r);
       })
-      .catch(() => toast({ description: "Ocorreu um erro fetch" }))
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        if (err.message === "UNSUBSCRIBED_USER") {
+          navigate('/plans');
+        }
+      }).finally(() => setLoading(false));
   };
 
   const fetchFlightCalendars = () => {
@@ -66,7 +69,7 @@ const Alerts = () => {
         setFlightCalendars(r);
       })
       .catch((err) => {
-        if (err.message === errorMessages.UNSUBSCRIBED_USER) {
+        if (err.message === "UNSUBSCRIBED_USER") {
           navigate('/plans');
         }
       })
