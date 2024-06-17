@@ -13,8 +13,7 @@ export type LoadingButtonProps = {
 const LoadingButton = ({ loading = false, text, onClick, disabled = false, type = 'button', className }: LoadingButtonProps) => {
   return (
     <Button disabled={disabled || loading} onClick={onClick} type={type} className={className}>
-      {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : undefined}
-      {text}
+      {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : text}
     </Button>
   )
 }
