@@ -14,6 +14,7 @@ export interface Plan {
   description: string;
   price: number;
   benefits: string[];
+  oldPrice: number;
 }
 
 export interface PlanCardProps {
@@ -31,13 +32,23 @@ const PlanCard = ({ plan, selectPlan, active, loading }: PlanCardProps) => {
         <CardDescription>{plan.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <h1 className="text-3xl font-bold mb-4">
-          {plan.price.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-          })}/mês
-        </h1>
-          
+        <div className="flex flex-col">
+          <h1 className="text-xl text-gray-500 font-bold mb-0 line-through">
+            {plan.oldPrice.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}/mês
+          </h1>
+
+          <h1 className="text-3xl font-bold mb-4">
+            {plan.price.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}/mês
+          </h1>
+
+        </div>
+
         <ul className="list-disc mb-4 pl-4">
           {plan.benefits.map((benefit, index) => (
             <li key={index}>

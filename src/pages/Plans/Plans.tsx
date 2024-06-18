@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 
 const Plans = () => {
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('authorization')
-console.log(isLoggedIn)
+    console.log(isLoggedIn)
     if (!isLoggedIn) {
       console.log('here')
       window.location.href = `${import.meta.env.VITE_APP_URL}`;
@@ -25,13 +25,14 @@ console.log(isLoggedIn)
       ? "Ocorreu um erro, tente novamente"
       : undefined;
 
-  const activePlan =localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")!).planId : undefined;
+  const activePlan = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")!).planId : undefined;
   const plans: Plan[] = [
     {
       id: 7,
       name: "Plano Start",
       description:
         "Ideal para viajantes que querem explorar novos destinos sem gastar muito. Receba alertas personalizados para garantir as melhore emissões de passagens com milhas!",
+      oldPrice: 39.9,
       price: 29.9,
       benefits: [
         "<b>6 alertas</b> com a Azul",
@@ -43,6 +44,7 @@ console.log(isLoggedIn)
       name: "Plano Black",
       description:
         "O plano perfeito para viajantes mais exigentes! Tenha acesso exclusivo a uma ampla gama de benefícios e garante viagens incríveis o ano todo.",
+      oldPrice: 79.9,
       price: 59.9,
       benefits: [
         "<b>10 Trechos</b> com a Azul",
