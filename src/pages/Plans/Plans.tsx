@@ -3,7 +3,7 @@ import { userService } from "@/services/user/UserService";
 import { useEffect, useState } from "react";
 
 const Plans = () => {
-  const [loading, setLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<number>();
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('authorization')
@@ -55,7 +55,7 @@ const Plans = () => {
 
   const onSelectPlan = (planId: number) => {
     console.log("planId", planId);
-    setLoading(true);
+    setSelectedPlan(planId);
 
     if (activePlan) {
       window.location.href = 'https://api.whatsapp.com/send?phone=554192562255&text=Ol%C3%A1,%20gostaria%20de%20fazer%20mudan%C3%A7a%20no%20meu%20plano%20do%20app%20Dominando%20Pontos';
@@ -70,7 +70,7 @@ const Plans = () => {
       })
       .catch((r) => {
         console.log(r);
-      }).finally(() => setLoading(false));
+      }).finally(() => setSelectedPlan(undefined));
   };
 
   return (
@@ -90,7 +90,7 @@ const Plans = () => {
             plan={plan}
             selectPlan={onSelectPlan}
             active={activePlan === plan.id}
-            loading={loading}
+            loading={selectedPlan === plan.id}
           />
         ))}
       </div>
