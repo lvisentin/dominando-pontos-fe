@@ -75,8 +75,8 @@ const Plans = () => {
 
   return (
     <div className="flex flex-col text-left ">
-      {sucMsg && <p className="text-xl font-bold text-green-500 mb-4">{sucMsg}</p>}
-      {errMsg && <p className="text-xl font-bold text-red-500 mb-4">{errMsg}</p>}
+      {sucMsg && <p className="text-xl bg-green-700 rounded-md font-bold text-white mb-4 py-4 px-6">{sucMsg}</p>}
+      {errMsg && <p className="text-xl font-bold bg-red-700 rounded-md text-white mb-4 py-4 px-6">{errMsg}</p>}
 
       <h1 className="text-base mb-2 font-bold">Minha assinatura</h1>
       <h2 className="text-base mb-4">
