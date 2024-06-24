@@ -14,10 +14,11 @@ export interface DataTableProps {
   footer?: ReactElement;
   actions?: RowAction[];
   limit?: number;
-  page?: number;
+  currentPage?: number;
   totalPages?: number;
   pagination?: boolean;
-  setPage?: (page: number) => any;
+  onPageNavigation?: (page: number) => any;
+  isNavigationDisabled?: boolean | undefined
 }
 
 export interface RowAction {

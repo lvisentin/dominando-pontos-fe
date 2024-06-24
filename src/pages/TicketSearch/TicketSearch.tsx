@@ -3,40 +3,38 @@ import DataTable from "@/components/DataTable/DataTable";
 import { DateRangeSelect } from "@/components/DateRangeSelect/DateRangeSelect";
 import LoadingButton from "@/components/LoadingButton/LoadingButton";
 import { Card, CardContent } from "@/components/ui/card";
-import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { flightsService } from "@/services/Flights/FlightsService";
 import { TicketSearchSchema } from "@/shared/schemas/TicketSearch.schema";
+import { convertDateWithHours } from "@/shared/utils/convertDateWithHours";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ticketSearchTableColumns } from "./utils";
-import { flightsService } from "@/services/Flights/FlightsService";
-import { convertDateWithHours } from "@/shared/utils/convertDateWithHours";
 
 const TicketSearch = () => {
   const [loading, setLoading] = useState(false);
   const [flights, setFlights] = useState([]);
-  const [page, setPage] = useState(1);
   const limit = 10;
 
-  const fetchData = async () => {
-    const result = await flightsService.getAllFlights({ limit, page })
+  const fetchAllFlights = async () => {
+    const result = await flightsService.getAllFlights({ limit, page: 1 });
 
-    setFlights(result.map((flight: any) => ({
-      ...flight,
-      departureDate: convertDateWithHours(flight.departureDate),
-      arrivalDate: convertDateWithHours(flight.arrivalDate)
-    })))
-  }
-  
-  useEffect(() => {
-    console.log(flights.length
-    )
-  }, [flights])
-
-  useEffect(() => {
-    fetchData()
-  }, [page])
+    setFlights(
+      result.map((flight: any) => ({
+        ...flight,
+        departureDate: convertDateWithHours(flight.departureDate),
+        arrivalDate: convertDateWithHours(flight.arrivalDate),
+      }))
+    );
+  };
 
   const form = useForm<z.infer<typeof TicketSearchSchema>>({
     resolver: zodResolver(TicketSearchSchema),
@@ -46,37 +44,56 @@ const TicketSearch = () => {
       date: new Date(),
     },
   });
+  
+  async function fetchFilteredFlights(page: number = 1) {
+    try {
+      const { date, ...formData } = form.getValues();
+      let result: any = [];
+      setLoading(true);
 
-  async function onSubmit(event: any) {
-    setLoading(true)
-    setPage(1)
+      if (!formData.arrivalAirport && !formData.departureAirport) {
+        result = await flightsService.getAllFlights({ limit, page });
+      } else {
+        result = await flightsService.getFlights({
+          ...formData,
+          departureDate: date.toISOString().split("T")[0],
+          page,
+          limit,
+        });
+      }
 
-    const result = await flightsService.getFlights({
-      ...event,
-      departureDate: event.date.toISOString().split('T')[0],
-      page: 1,
-      limit,
-    })
-
-    setFlights(result.map((flight: any) => ({
-      ...flight,
-      departureDate: convertDateWithHours(flight.departureDate),
-      arrivalDate: convertDateWithHours(flight.arrivalDate)
-    })))
-
-    setLoading(false)
+      setFlights(
+        result.map((flight: any) => ({
+          ...flight,
+          departureDate: convertDateWithHours(flight.departureDate),
+          arrivalDate: convertDateWithHours(flight.arrivalDate),
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching flights:", error);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  useEffect(() => {
+    fetchAllFlights();
+  }, []);
 
   return (
     <div className="flex flex-col text-left ">
       <h1 className="text-base mb-2 font-bold">Busca por passagens</h1>
       <h2 className="text-base mb-4">
-        Busque o destino que você deseja ir e veja as disponibilidades em nosso sistema.
+        Busque o destino que você deseja ir e veja as disponibilidades em nosso
+        sistema.
       </h2>
 
       <Card className="pt-6 mb-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+          <form
+            onSubmit={form.handleSubmit(() => fetchFilteredFlights())}
+            className="w-full"
+          >
             <CardContent className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-end">
               <FormField
                 control={form.control}
@@ -122,7 +139,7 @@ const TicketSearch = () => {
                       disabled={false}
                       min={new Date()}
                       date={field.value}
-                      setDate={(date: any) => form.setValue('date', date)}
+                      setDate={(date: any) => form.setValue("date", date)}
                       mode="single"
                       className="w-full mt-2"
                     />
@@ -131,17 +148,19 @@ const TicketSearch = () => {
                 )}
               />
 
-              <LoadingButton
-                loading={loading}
-                text="Buscar"
-                type="submit"
-              />
+              <LoadingButton loading={loading} text="Buscar" type="submit" />
             </CardContent>
           </form>
         </Form>
       </Card>
 
-      <DataTable page={page} limit={limit} setPage={setPage} pagination={true} columns={ticketSearchTableColumns} data={flights} />
+      <DataTable
+        pagination
+        onPageNavigation={fetchFilteredFlights}
+        isNavigationDisabled={flights?.length < 10}
+        columns={ticketSearchTableColumns}
+        data={flights}
+      />
     </div>
   );
 };
