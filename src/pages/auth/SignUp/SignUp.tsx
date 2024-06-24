@@ -17,7 +17,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { authService } from "@/services/auth/AuthService"
 import { SignUpResponse } from "@/services/auth/auth.model"
 import { handleFetchErrorMessage } from "@/shared/utils/errors/handleFetchErrorMessage"
-import { phoneMask } from "@/shared/utils/phoneMask"
+import { cleanPhone, phoneMask } from "@/shared/utils/phoneMask"
 import { useMaskito } from '@maskito/react'
 import { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
@@ -33,7 +33,7 @@ const SignUp = () => {
     name: z.string().min(2, {
       message: "Por favor, digite seu nome",
     }),
-    phone: z.string().min(2, {
+    phone: z.string().min(8, {
       message: "Por favor, digite seu telefone",
     }),
     email: z.string().min(2, {
@@ -56,7 +56,7 @@ const SignUp = () => {
 
   function onSubmit({ email, name, password, phone }: z.infer<typeof formSchema>) {
     setLoading(true);
-    authService.signUp({ email, name, password, phone }).then((r: SignUpResponse) => {
+    authService.signUp({ email, name, password, phone: cleanPhone(phone) }).then((r: SignUpResponse) => {
       localStorage.setItem('authorization', r.accessToken)
       localStorage.setItem('userData', JSON.stringify(r.user))
       navigate('/config')
