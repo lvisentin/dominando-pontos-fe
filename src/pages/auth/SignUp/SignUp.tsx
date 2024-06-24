@@ -17,6 +17,8 @@ import { useToast } from "@/components/ui/use-toast"
 import { authService } from "@/services/auth/AuthService"
 import { SignUpResponse } from "@/services/auth/auth.model"
 import { handleFetchErrorMessage } from "@/shared/utils/errors/handleFetchErrorMessage"
+import { phoneMask } from "@/shared/utils/phoneMask"
+import { useMaskito } from '@maskito/react'
 import { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 
@@ -25,9 +27,14 @@ const SignUp = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const maskedInputRef = useMaskito({ options: phoneMask });
+
   const formSchema = z.object({
     name: z.string().min(2, {
       message: "Por favor, digite seu nome",
+    }),
+    phone: z.string().min(2, {
+      message: "Por favor, digite seu telefone",
     }),
     email: z.string().min(2, {
       message: "Por favor, digite seu email",
@@ -41,14 +48,15 @@ const SignUp = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
+      phone: "",
       name: "",
       password: "",
     },
   })
 
-  function onSubmit({ email, name, password }: z.infer<typeof formSchema>) {
+  function onSubmit({ email, name, password, phone }: z.infer<typeof formSchema>) {
     setLoading(true);
-    authService.signUp({ email, name, password }).then((r: SignUpResponse) => {
+    authService.signUp({ email, name, password, phone }).then((r: SignUpResponse) => {
       localStorage.setItem('authorization', r.accessToken)
       localStorage.setItem('userData', JSON.stringify(r.user))
       navigate('/config')
@@ -90,6 +98,22 @@ const SignUp = () => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="Digite seu email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem className="text-left">
+                  <FormLabel>Telefone</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Digite seu telefone" {...field} ref={maskedInputRef} onInput={(evt: any) => {
+                      form.setValue("phone", evt.currentTarget.value)
+                    }} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
