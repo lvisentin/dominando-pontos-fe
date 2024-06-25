@@ -11,12 +11,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { flightsService } from "@/services/Flights/FlightsService";
-import { TicketSearchSchema } from "@/shared/schemas/TicketSearch.schema";
 import { convertDateWithHours } from "@/shared/utils/convertDateWithHours";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { ticketSearchTableColumns } from "./utils";
 
 const TicketSearch = () => {
@@ -36,27 +33,42 @@ const TicketSearch = () => {
     );
   };
 
-  const form = useForm<z.infer<typeof TicketSearchSchema>>({
-    resolver: zodResolver(TicketSearchSchema),
+  useEffect(() => {
+    fetchAllFlights();
+  }, []);
+
+  const form = useForm({
+    // TODO: consertar isso
+    // <z.infer<typeof TicketSearchSchema>>
+    // resolver: zodResolver(TicketSearchSchema),
     defaultValues: {
       departureAirport: "",
       arrivalAirport: "",
-      date: new Date(),
+      cabinClass: undefined,
+      date: undefined,
     },
   });
-  
+
   async function fetchFilteredFlights(page: number = 1) {
     try {
       const { date, ...formData } = form.getValues();
       let result: any = [];
       setLoading(true);
 
-      if (!formData.arrivalAirport && !formData.departureAirport) {
+      const params = {
+        departureAirport: formData.departureAirport ? formData.departureAirport : undefined,
+        cabinClass: (formData.cabinClass && formData.cabinClass !== 'all') ? formData.cabinClass : undefined,
+        arrivalAirport: formData.arrivalAirport ? formData.arrivalAirport : undefined,
+        departureDate: date ? date.toISOString().split('T')[0] : undefined,
+        page: 1,
+        limit,
+      }
+
+      if (!formData.arrivalAirport && !formData.departureAirport && !formData.cabinClass && !date) {
         result = await flightsService.getAllFlights({ limit, page });
       } else {
         result = await flightsService.getFlights({
-          ...formData,
-          departureDate: date.toISOString().split("T")[0],
+          ...params,
           page,
           limit,
         });
@@ -75,10 +87,6 @@ const TicketSearch = () => {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    fetchAllFlights();
-  }, []);
 
   return (
     <div className="flex flex-col text-left ">
