@@ -1,4 +1,5 @@
 import AirportSelect from "@/components/AirportSelect/AirportSelect";
+import CabinClassSelect from "@/components/CabinClassSelect/CabinClassSelect";
 import DataTable from "@/components/DataTable/DataTable";
 import { DateRangeSelect } from "@/components/DateRangeSelect/DateRangeSelect";
 import LoadingButton from "@/components/LoadingButton/LoadingButton";
@@ -45,7 +46,7 @@ const TicketSearch = () => {
       departureAirport: "",
       arrivalAirport: "",
       cabinClass: undefined,
-      date: undefined,
+      date: "",
     },
   });
 
@@ -59,7 +60,7 @@ const TicketSearch = () => {
         departureAirport: formData.departureAirport ? formData.departureAirport : undefined,
         cabinClass: (formData.cabinClass && formData.cabinClass !== 'all') ? formData.cabinClass : undefined,
         arrivalAirport: formData.arrivalAirport ? formData.arrivalAirport : undefined,
-        departureDate: date ? date.toISOString().split('T')[0] : undefined,
+        departureDate: date ? (date as any).toISOString().split('T')[0] : undefined,
         page: 1,
         limit,
       }
@@ -102,7 +103,7 @@ const TicketSearch = () => {
             onSubmit={form.handleSubmit(() => fetchFilteredFlights())}
             className="w-full"
           >
-            <CardContent className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-end">
+            <CardContent className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-end">
               <FormField
                 control={form.control}
                 name="departureAirport"
@@ -131,6 +132,21 @@ const TicketSearch = () => {
                       onSelect={(value) =>
                         form.setValue("arrivalAirport", value)
                       }
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="cabinClass"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cabine</FormLabel>
+                    <CabinClassSelect
+                      value={field.value}
+                      onSelect={(value) => form.setValue("cabinClass", value)}
                     />
                     <FormMessage />
                   </FormItem>
@@ -169,7 +185,7 @@ const TicketSearch = () => {
         columns={ticketSearchTableColumns}
         data={flights}
       />
-    </div>
+    </div >
   );
 };
 

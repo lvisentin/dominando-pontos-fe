@@ -26,6 +26,10 @@ export const ticketSearchTableColumns: TableColumn[] = [
     name: "Cia aérea"
   },
   {
+    field: "cabinClass",
+    name: "Cabine"
+  },
+  {
     field: "price",
     name: "Custo "
   },
