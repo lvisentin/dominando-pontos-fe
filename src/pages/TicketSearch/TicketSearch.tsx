@@ -1,22 +1,22 @@
 import AirportSelect from "@/components/AirportSelect/AirportSelect";
+import CabinClassSelect from "@/components/CabinClassSelect/CabinClassSelect";
 import DataTable from "@/components/DataTable/DataTable";
 import { DateRangeSelect } from "@/components/DateRangeSelect/DateRangeSelect";
 import LoadingButton from "@/components/LoadingButton/LoadingButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { TicketSearchSchema } from "@/shared/schemas/TicketSearch.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { ticketSearchTableColumns } from "./utils";
+import { useToast } from "@/components/ui/use-toast";
 import { flightsService } from "@/services/Flights/FlightsService";
 import { convertDateWithHours } from "@/shared/utils/convertDateWithHours";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { ticketSearchTableColumns } from "./utils";
 
 const TicketSearch = () => {
   const [loading, setLoading] = useState(false);
   const [flights, setFlights] = useState([]);
   const [page, setPage] = useState(1);
+  const { toast } = useToast();
   const limit = 10;
 
   const fetchData = async () => {
@@ -28,7 +28,7 @@ const TicketSearch = () => {
       arrivalDate: convertDateWithHours(flight.arrivalDate)
     })))
   }
-  
+
   useEffect(() => {
     console.log(flights.length
     )
@@ -38,25 +38,39 @@ const TicketSearch = () => {
     fetchData()
   }, [page])
 
-  const form = useForm<z.infer<typeof TicketSearchSchema>>({
-    resolver: zodResolver(TicketSearchSchema),
+  const form = useForm({
+    // TODO: consertar isso
+    // <z.infer<typeof TicketSearchSchema>>
+    // resolver: zodResolver(TicketSearchSchema),
     defaultValues: {
       departureAirport: "",
       arrivalAirport: "",
-      date: new Date(),
+      cabinClass: 'all',
+      date: undefined,
     },
   });
 
-  async function onSubmit(event: any) {
+  async function onSubmit({ departureAirport, cabinClass, arrivalAirport, date }: any) {
     setLoading(true)
     setPage(1)
 
     const result = await flightsService.getFlights({
-      ...event,
-      departureDate: event.date.toISOString().split('T')[0],
+      departureAirport: departureAirport && departureAirport,
+      cabinClass: (cabinClass && cabinClass !== 'all') ? cabinClass : undefined,
+      arrivalAirport: arrivalAirport && arrivalAirport,
+      departureDate: date && date.toISOString().split('T')[0],
       page: 1,
       limit,
     })
+      .catch(() => {
+        toast({ description: "Ocorreu um erro, tente novamente" });
+        return;
+      })
+      .finally(() => setLoading(false))
+
+    if (!result) {
+      return
+    }
 
     setFlights(result.map((flight: any) => ({
       ...flight,
@@ -77,7 +91,7 @@ const TicketSearch = () => {
       <Card className="pt-6 mb-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-            <CardContent className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-end">
+            <CardContent className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-end">
               <FormField
                 control={form.control}
                 name="departureAirport"
@@ -106,6 +120,21 @@ const TicketSearch = () => {
                       onSelect={(value) =>
                         form.setValue("arrivalAirport", value)
                       }
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="cabinClass"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Cabine</FormLabel>
+                    <CabinClassSelect
+                      value={field.value}
+                      onSelect={(value) => form.setValue("cabinClass", value)}
                     />
                     <FormMessage />
                   </FormItem>
