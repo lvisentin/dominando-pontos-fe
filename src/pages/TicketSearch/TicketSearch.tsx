@@ -51,7 +51,7 @@ const TicketSearch = () => {
       return;
     }
 
-    fetchFlights({...formData, page});
+    fetchFlights({ ...formData, page });
   }, [page])
 
 
@@ -90,10 +90,27 @@ const TicketSearch = () => {
   }
 
   const clearFields = () => {
+    // estou com sono, relevar esse código até 2a ordem
+    // PERIGO ☢️☢️☢️ altos indices de chernobyl aqui
+    const formData = form.getValues();
+
+    if (!formData.arrivalAirport && !formData.departureAirport && !formData.cabinClass && !formData.date) {
+      return;
+    }
+
     form.setValue('arrivalAirport', "");
     form.setValue('departureAirport', "");
     form.setValue('cabinClass', "");
     form.setValue('date', undefined);
+
+    const params = {
+      'arrivalAirport': "",
+      'departureAirport': "",
+      'cabinClass': "",
+      'date': undefined,
+    }
+
+    fetchFlights(params);
   }
 
   return (
