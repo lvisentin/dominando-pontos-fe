@@ -15,3 +15,15 @@ export function getArrayOfDates(from: any, to: any): string[] {
 
   return daysArray;
 }
+
+export const getEndpointParams = (url: string, params: any) => {
+  let newUrl = `${url}?`;
+  
+  for (const param of Object.keys(params)) {
+    if (params[param]) {
+      newUrl += `&${param}=${params[param]}`
+    }
+  }
+
+  return newUrl
+}
