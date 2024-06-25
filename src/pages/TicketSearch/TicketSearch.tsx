@@ -11,6 +11,7 @@ import { convertDateWithHours } from "@/shared/utils/convertDateWithHours";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ticketSearchTableColumns } from "./utils";
+import { Button } from "@/components/ui/button";
 
 const TicketSearch = () => {
   const [loading, setLoading] = useState(false);
@@ -29,15 +30,6 @@ const TicketSearch = () => {
     })))
   }
 
-  useEffect(() => {
-    console.log(flights.length
-    )
-  }, [flights])
-
-  useEffect(() => {
-    fetchData()
-  }, [page])
-
   const form = useForm({
     // TODO: consertar isso
     // <z.infer<typeof TicketSearchSchema>>
@@ -50,16 +42,26 @@ const TicketSearch = () => {
     },
   });
 
-  async function onSubmit({ departureAirport, cabinClass, arrivalAirport, date }: any) {
-    setLoading(true)
-    setPage(1)
 
+  useEffect(() => {
+    const formData = form.getValues();
+
+    if (!formData.arrivalAirport && !formData.departureAirport && !formData.cabinClass && !formData.date) {
+      fetchData();
+      return;
+    }
+
+    fetchFlights({...formData, page});
+  }, [page])
+
+
+  const fetchFlights = async ({ departureAirport, cabinClass, arrivalAirport, date, page }: any) => {
     const result = await flightsService.getFlights({
       departureAirport: departureAirport && departureAirport,
       cabinClass: (cabinClass && cabinClass !== 'all') ? cabinClass : undefined,
       arrivalAirport: arrivalAirport && arrivalAirport,
       departureDate: date && date.toISOString().split('T')[0],
-      page: 1,
+      page,
       limit,
     })
       .catch(() => {
@@ -81,6 +83,19 @@ const TicketSearch = () => {
     setLoading(false)
   }
 
+  async function onSubmit({ departureAirport, cabinClass, arrivalAirport, date }: any) {
+    setLoading(true)
+    setPage(1)
+    fetchFlights({ departureAirport, cabinClass, arrivalAirport, date, page: 1 })
+  }
+
+  const clearFields = () => {
+    form.setValue('arrivalAirport', "");
+    form.setValue('departureAirport', "");
+    form.setValue('cabinClass', "");
+    form.setValue('date', undefined);
+  }
+
   return (
     <div className="flex flex-col text-left ">
       <h1 className="text-base mb-2 font-bold">Busca por passagens</h1>
@@ -91,7 +106,7 @@ const TicketSearch = () => {
       <Card className="pt-6 mb-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
-            <CardContent className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-end">
+            <CardContent className="grid grid-cols-1 lg:grid-cols-6 gap-4 items-end">
               <FormField
                 control={form.control}
                 name="departureAirport"
@@ -165,12 +180,13 @@ const TicketSearch = () => {
                 text="Buscar"
                 type="submit"
               />
+              <Button onClick={clearFields} variant="outline" type="button">Limpar filtros</Button>
             </CardContent>
           </form>
         </Form>
       </Card>
 
-      <DataTable page={page} limit={limit} setPage={setPage} pagination={true} columns={ticketSearchTableColumns} data={flights} />
+      <DataTable isNavigationDisabled={flights.length < 10} page={page} limit={limit} setPage={setPage} pagination={true} columns={ticketSearchTableColumns} data={flights} />
     </div>
   );
 };

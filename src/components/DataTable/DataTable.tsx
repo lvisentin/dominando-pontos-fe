@@ -16,6 +16,7 @@ export default function DataTable({
   page,
   setPage,
   pagination = false,
+  isNavigationDisabled,
 }: DataTableProps) {
   const rowClasses = `text-sm md:text-md pr-0 py-4 pl-4 md:py-4 md:pl-8`
 
@@ -111,13 +112,22 @@ export default function DataTable({
       <div>
         {
           pagination && (
-            <div className='flex gap-4 text-center justify-center items-center mt-4 px-4 overflow-x-auto overflow-hidden'>
-
-
-              <Button onClick={() => changePage(page! - 1)} className={`bg-primary text-white border-2 rounded-md `}><FontAwesomeIcon icon={faArrowLeft} /></Button>
-              <Button onClick={() => changePage(page! + 1)} className={`bg-primary text-white border-2 rounded-md `}><FontAwesomeIcon icon={faArrowRight} /></Button>
-
-            </div>
+            <div className="flex gap-4 text-center justify-center items-center mt-4 px-4 overflow-x-auto overflow-hidden">
+            <Button
+              onClick={() => changePage(page! - 1)}
+              className={`bg-primary text-white border-2 rounded-md `}
+              disabled={page === 1}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </Button>
+            <Button
+              onClick={() => changePage(page! + 1)}
+              className={`bg-primary text-white border-2 rounded-md `}
+              disabled={isNavigationDisabled}
+            >
+              <FontAwesomeIcon icon={faArrowRight} />
+            </Button>
+          </div>
           )}
       </div>
 

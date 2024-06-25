@@ -18,6 +18,7 @@ export interface DataTableProps {
   totalPages?: number;
   pagination?: boolean;
   setPage?: (page: number) => any;
+  isNavigationDisabled?: boolean;
 }
 
 export interface RowAction {
