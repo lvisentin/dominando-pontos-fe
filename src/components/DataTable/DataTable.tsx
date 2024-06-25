@@ -44,7 +44,7 @@ export default function DataTable({
   }
 
   return (
-    <div className="card p-0">
+    <div className="card overflow-x-auto md:overflow-x-hidden p-0">
       <div className="tableHeader">{header && header}</div>
 
       <table className={`table w-full ${styles.table}`} style={{ backgroundColor: 'white' }}>
