@@ -9,13 +9,13 @@ type GetFlightsParams = {
   cabinClass: CabinClass
   limit: number
   page: number
+  isAward: number
 }
 
 class FlightsService {
-  async getFlights({ departureAirport, cabinClass, arrivalAirport, departureDate, limit, page }: GetFlightsParams) {
+  async getFlights({ departureAirport, cabinClass, arrivalAirport, departureDate, limit, page, isAward }: GetFlightsParams) {
     const authorization = `Bearer ${localStorage.getItem('authorization')}`;
-    const url = getEndpointParams('flights', { departureAirport, cabinClass, arrivalAirport, departureDate, limit, page });
-    
+    const url = getEndpointParams('flights', { departureAirport, cabinClass, arrivalAirport, departureDate, limit, page, isAward });
     return await api.get(
       url,
       { authorization }
