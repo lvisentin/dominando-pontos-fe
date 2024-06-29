@@ -1,4 +1,6 @@
+import { CabinBadge } from "@/components/CabinBadge/CabinBadge";
 import { TableColumn } from "@/components/DataTable/DataTable.model";
+import { Badge } from "@/components/ui/badge";
 
 export const ticketSearchTableColumns: TableColumn[] = [
   {
@@ -27,7 +29,17 @@ export const ticketSearchTableColumns: TableColumn[] = [
   },
   {
     field: "cabinClass",
-    name: "Cabine"
+    name: "Cabine",
+    transformData: ({ cabinClass }) => {
+      return <CabinBadge cabin={cabinClass} />
+    }
+  },
+  {
+    field: "isAward",
+    name: "Tipo de tarifa",
+    transformData: ({ isAward }) => {
+      return <Badge className={`${isAward ? 'bg-green-600' : 'bg-primary'}`}>{isAward ? '⭐️ Award ⭐️' : 'Pública'}</Badge>
+    }
   },
   {
     field: "price",

@@ -19,6 +19,7 @@ const TicketSearch = () => {
   const [page, setPage] = useState(1);
   const { toast } = useToast();
   const limit = 10;
+  const [filters, setFilters] = useState({ isAward: 0 });
 
   const fetchData = async () => {
     const result = await flightsService.getAllFlights({ limit, page })
@@ -42,7 +43,9 @@ const TicketSearch = () => {
     },
   });
 
-
+  // TODO: ELIMINAR ESSES DOIS USEEFFECT
+  // MOTIVO: REALIZANDO CHAMADAS DUPLAS POIS QUANDO MUDAM-SE OS FILTROS
+  // A PAGE TAMBÉM MUDA, ENTÃO ACABA TRIGGANDO OS DOIS
   useEffect(() => {
     const formData = form.getValues();
 
@@ -51,11 +54,17 @@ const TicketSearch = () => {
       return;
     }
 
-    fetchFlights({ ...formData, page });
+    fetchFlights({ ...formData, page, filters });
   }, [page])
 
+  useEffect(() => {
+    setPage(1);
+    const formData = form.getValues();
+    fetchFlights({ ...formData, page: 1, filters });
+  }, [filters])
 
-  const fetchFlights = async ({ departureAirport, cabinClass, arrivalAirport, date, page }: any) => {
+
+  const fetchFlights = async ({ departureAirport, cabinClass, arrivalAirport, date, page, filters }: any) => {
     const result = await flightsService.getFlights({
       departureAirport: departureAirport && departureAirport,
       cabinClass: (cabinClass && cabinClass !== 'all') ? cabinClass : undefined,
@@ -63,6 +72,7 @@ const TicketSearch = () => {
       departureDate: date && date.toISOString().split('T')[0],
       page,
       limit,
+      ...filters,
     })
       .catch(() => {
         toast({ description: "Ocorreu um erro, tente novamente" });
@@ -111,6 +121,14 @@ const TicketSearch = () => {
     }
 
     fetchFlights(params);
+  }
+
+  const filterByAward = () => {
+    setFilters((old) => {
+      return {
+        isAward: old.isAward === 1 ? 0 : 1
+      }
+    });
   }
 
   return (
@@ -202,6 +220,10 @@ const TicketSearch = () => {
           </form>
         </Form>
       </Card>
+
+      <div>
+        <Button variant={filters.isAward === 1 ? "default" : "outline"} onClick={filterByAward}>⭐️ &nbsp;&nbsp;Tarifas Award&nbsp;&nbsp; ⭐️</Button>
+      </div>
 
       <DataTable isNavigationDisabled={flights.length < 10} page={page} limit={limit} setPage={setPage} pagination={true} columns={ticketSearchTableColumns} data={flights} />
     </div>
