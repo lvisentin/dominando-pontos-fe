@@ -221,7 +221,7 @@ const TicketSearch = () => {
         </Form>
       </Card>
 
-      <div>
+      <div className="mb-6">
         <Button variant={filters.isAward === 1 ? "default" : "outline"} onClick={filterByAward}>⭐️ &nbsp;&nbsp;Tarifas Award&nbsp;&nbsp; ⭐️</Button>
       </div>
 
