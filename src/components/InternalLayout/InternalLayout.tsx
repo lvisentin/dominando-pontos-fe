@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import AlertMessage from "../AlertMessage/AlertMessage";
 import Sidebar from "../Sidebar/Sidebar";
@@ -6,11 +6,15 @@ import Header from "../header/Header";
 
 const InternalLayout = () => {
   const navigate = useNavigate();
-  const hasTelegramBotSetup = !!JSON.parse(localStorage.getItem("userData")!).telegramChatId
+  const [hasTelegramBotSetup, setHasTelegramBotSetup] = useState(undefined);
 
   useEffect(() => {
-    if (!localStorage.getItem('authorization')) {
-      navigate('/')
+    const userData = JSON.parse(localStorage.getItem("userData")!)
+
+    if (!userData) {
+      navigate('/');
+    } else {
+      setHasTelegramBotSetup(userData.telegramChatId);
     }
   }, [])
 
@@ -20,10 +24,10 @@ const InternalLayout = () => {
 
   return <div className="flex flex-col">
     <Header />
-    
+
     {!hasTelegramBotSetup ? (
-      <AlertMessage 
-        message="Você ainda não configurou nosso bot do Telegram." 
+      <AlertMessage
+        message="Você ainda não configurou nosso bot do Telegram."
         buttonTitle="Configure agora"
         action={redirectTelegramBot}
       />
