@@ -85,7 +85,7 @@ const Alerts = () => {
 
       const payload: CreateFlightCalendarRequest = {
         ...values,
-        cabinClass: values.cabinClass === 'all' ? null : values.cabinClass,
+        cabinClass: values.cabinClass === 'all' ? undefined : values.cabinClass,
         dates: {
           departureDates,
           returnDates,

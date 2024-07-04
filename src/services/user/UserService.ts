@@ -31,6 +31,7 @@ export interface CreateFlightCalendarRequest extends CreateFlightRequest {
     departureDates: string[];
     returnDates: string[];
   }
+  cabinClass?: string;
 }
 
 export interface FlightCalendar {
@@ -60,9 +61,9 @@ class UserService {
     return await api.post(`/users/saved-destinations`, { departureAirport, arrivalAirport, departureDate, arrivalDate, cabinClass }, { authorization })
   }
 
-  async createFlightCalendar({ departureAirport, arrivalAirport, dates }: CreateFlightCalendarRequest) {
+  async createFlightCalendar({ departureAirport, arrivalAirport, dates, cabinClass }: CreateFlightCalendarRequest) {
     const authorization = `Bearer ${localStorage.getItem('authorization')}`;
-    return await api.post(`/users/flight-calendars`, { departureAirport, arrivalAirport, dates }, { authorization })
+    return await api.post(`/users/flight-calendars`, { departureAirport, arrivalAirport, dates, cabinClass }, { authorization })
   }
 
   async createSubscription({ planId }: { planId: number }) {
