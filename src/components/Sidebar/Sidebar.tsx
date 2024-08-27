@@ -15,14 +15,14 @@ const Sidebar = () => {
       <SidebarLink icon={faCog} to="/config" label="Configurar alertas" />
       {userData && userData?.invitationCode === 'HERON' && (
         <div className='flex items-center'>
-          <SidebarLink icon={faPlane} to="/alerts" label="Alertas de passagens" disabled />
+          <SidebarLink icon={faPlane} to="/alerts" label="Emissões" disabled />
           <Badge className={`bg-green-600`}>Em Breve</Badge>
         </div>
       )}
 
       {userData && userData?.invitationCode !== 'HERON' && (
         <>
-          <SidebarLink icon={faPlane} to="/alerts" label="Alertas de passagens" />
+          <SidebarLink icon={faPlane} to="/alerts" label="Emissões" />
           <SidebarLink icon={faMagnifyingGlass} to="/ticket-search" label="Busca por passagens" />
           <SidebarLink icon={faDollarSign} to="/plans" label="Minha Assinatura" />
         </>
