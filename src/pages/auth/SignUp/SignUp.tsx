@@ -42,6 +42,7 @@ const SignUp = () => {
     password: z.string().min(6, {
       message: "Por favor, digite sua senha",
     }),
+    invitationCode: z.string()
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,6 +52,7 @@ const SignUp = () => {
       phone: "",
       name: "",
       password: "",
+      invitationCode: "",
     },
   })
 
@@ -128,6 +130,20 @@ const SignUp = () => {
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
                     <Input placeholder="Digite sua senha" type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="invitationCode"
+              render={({ field }) => (
+                <FormItem className="text-left">
+                  <FormLabel>Código de convite</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Digite seu código de convite" type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

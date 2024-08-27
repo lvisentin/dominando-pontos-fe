@@ -1,9 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import InternalLayout from './components/InternalLayout/InternalLayout'
 import { Toaster } from './components/ui/toaster'
-import Alerts from './pages/Alerts/Alerts'
 import AlertsCreate from './pages/Alerts/Create'
 import Config from './pages/Config/Config'
 import Dashboard from './pages/Dashboard/Dashboard'
@@ -12,14 +11,19 @@ import TicketSearch from './pages/TicketSearch/TicketSearch'
 import NewPass from './pages/auth/NewPass/NewPass'
 import SignIn from './pages/auth/SignIn/SignIn'
 import SignUp from './pages/auth/SignUp/SignUp'
+import Alerts from './pages/Alerts/Alerts'
 
 const App = () => {
+  const [invitationCode, setInvitationCode] = useState('');
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('authorization')
 
     if (isLoggedIn && window.location.pathname === '/') {
       window.location.href = `${import.meta.env.VITE_APP_URL}/config`;
     }
+
+    setInvitationCode(JSON.parse(localStorage.getItem('userData')!).invitationCode)
   }, [])
 
   return (
@@ -36,9 +40,14 @@ const App = () => {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/config' element={<Config />} />
           <Route path='/alerts' element={<Alerts />} />
-          <Route path='/alerts/create' element={<AlertsCreate />} />
-          <Route path='/ticket-search' element={<TicketSearch />} />
-          <Route path='/plans' element={<Plans />} />
+          {invitationCode !== 'HERON' && (
+            <>
+              <Route path='/alerts/create' element={<AlertsCreate />} />
+              <Route path='/ticket-search' element={<TicketSearch />} />
+              <Route path='/plans' element={<Plans />} />
+            </>
+          )}
+
         </Route>
 
         <Route path="**" element={<SignIn />} />
