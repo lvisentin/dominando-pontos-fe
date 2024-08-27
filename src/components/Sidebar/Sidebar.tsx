@@ -12,7 +12,7 @@ const Sidebar = () => {
 
   return <aside className="w-full md:w-[15%] md:min-w-[250px] pt-4 pb-4 md:pb-0">
     <ul>
-      <SidebarLink icon={faCog} to="/config" label="Configurar alertas" />
+      <SidebarLink icon={faCog} to="/config" label="Configurar alertas de pontos" />
       {userData && userData?.invitationCode === 'HERON' && (
         <div className='flex items-center'>
           <SidebarLink icon={faPlane} to="/alerts" label="Emissões" disabled />
