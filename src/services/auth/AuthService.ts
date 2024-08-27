@@ -5,8 +5,8 @@ class AuthService {
     return await api.post(`auth/signin`, { email, password })
   }
 
-  async signUp({ name, email, password, phone }: { name: string, email: string, password: string, phone: string }) {
-    return await api.post(`auth/signup`, { name, email, password, phone })
+  async signUp({ name, email, password, phone, invitationCode }: { name: string, email: string, password: string, phone: string, invitationCode: string }) {
+    return await api.post(`auth/signup`, { name, email, password, phone, invitationCode })
   }
 
   async updatePassword({ email, password }: { email: string, password: string }) {

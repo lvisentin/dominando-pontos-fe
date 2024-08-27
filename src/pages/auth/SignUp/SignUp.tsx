@@ -56,9 +56,9 @@ const SignUp = () => {
     },
   })
 
-  function onSubmit({ email, name, password, phone }: z.infer<typeof formSchema>) {
+  function onSubmit({ email, name, password, phone, invitationCode }: z.infer<typeof formSchema>) {
     setLoading(true);
-    authService.signUp({ email, name, password, phone: cleanPhone(phone) }).then((r: SignUpResponse) => {
+    authService.signUp({ email, name, password, invitationCode, phone: cleanPhone(phone) }).then((r: SignUpResponse) => {
       localStorage.setItem('authorization', r.accessToken)
       localStorage.setItem('userData', JSON.stringify(r.user))
       navigate('/config')
@@ -135,7 +135,7 @@ const SignUp = () => {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="invitationCode"
