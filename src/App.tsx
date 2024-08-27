@@ -23,7 +23,9 @@ const App = () => {
       window.location.href = `${import.meta.env.VITE_APP_URL}/config`;
     }
 
-    setInvitationCode(JSON.parse(localStorage.getItem('userData')!).invitationCode)
+    if(localStorage.getItem('userData')) {
+      setInvitationCode(JSON.parse(localStorage.getItem('userData')!)?.invitationCode)
+    }
   }, [])
 
   return (
