@@ -42,8 +42,16 @@ const Home = () => {
     }
 
     useEffect(() => {
+        const isLoggedIn = localStorage.getItem('authorization')
+        console.log(isLoggedIn)
+        if (!isLoggedIn) {
+            console.log('here')
+            window.location.href = `${import.meta.env.VITE_APP_URL}`;
+        }
+
         fetchLoyaltyPrograms();
     }, [])
+
 
     return (
         <div className="flex flex-col text-left ">
@@ -52,9 +60,9 @@ const Home = () => {
                 Últimas novidades
             </h2>
 
-            <div className="flex flex-wrap items-start justify-start gap-4">
+            <div className="flex flex-wrap items-start justify-around lg:justify-start gap-4">
                 {loyaltyPrograms && loyaltyPrograms.map((lProgram: LoyaltyProgram) => (
-                    lProgram.currency ? <Card className="w-[250px] flex flex-col items-center justify-center h-[250px]">
+                    lProgram.currency ? <Card className="w-[45%] lg:w-[250px] flex flex-col items-center justify-center h-[250px]">
                         <div className="flex flex-col justify-center items-center">
                             <img src={lProgram.partner.logoUrl} className="w-[150px] mx-auto" />
                             <div className="flex items-center">
@@ -64,8 +72,7 @@ const Home = () => {
                                 <p className="text-xl font-bold ml-1 mr-2"> {lProgram.parityClub} </p>
                                 <span className="text-xs"> pontos <br /> {lProgram.programName}</span>
                             </div>
-                            <a href={lProgram.programLink} target="_blank" className="cursor-pointer px-4 py-3 hover:bg-primary/80 transition-all bg-primary text-white rounded-full text-xs text-center mx-2 mt-4">Ir para a página do parceiro</a>
-
+                            <a href={lProgram.programLink} target="_blank" className="cursor-pointer py-2 px-4 hover:bg-primary/80 transition-all bg-primary text-white rounded-full text-xs text-center mx-2 mt-4">Ir para a página do parceiro</a>
                         </div>
                     </Card> : <></>
                 ))}
