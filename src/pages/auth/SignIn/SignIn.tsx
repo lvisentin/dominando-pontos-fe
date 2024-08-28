@@ -51,7 +51,7 @@ const SignIn = () => {
       .then((r: SignInResponse) => {
         localStorage.setItem("authorization", r.accessToken);
         localStorage.setItem("userData", JSON.stringify(r.user));
-        navigate("/config");
+        navigate("/home");
       })
       .catch(() => {
         toast({ description: "Email ou senha incorretos" });
