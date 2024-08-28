@@ -44,7 +44,7 @@ const App = () => {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/config' element={<Config />} />
           <Route path='/alerts' element={<Alerts />} />
-          {invitationCode.toLowerCase() !== 'heron' && (
+          {invitationCode?.toLowerCase() !== 'heron' && (
             <>
               <Route path='/alerts/create' element={<AlertsCreate />} />
               <Route path='/ticket-search' element={<TicketSearch />} />

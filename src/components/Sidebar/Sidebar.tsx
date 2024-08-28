@@ -14,14 +14,14 @@ const Sidebar = () => {
     <ul>
       <SidebarLink icon={faHome} to="/home" label="Home" />
       <SidebarLink icon={faCog} to="/config" label="Configurar alertas de pontos" />
-      {userData && userData?.invitationCode.toLowerCase() === 'heron' && (
+      {userData && userData?.invitationCode?.toLowerCase() === 'heron' && (
         <div className='flex items-center'>
           <SidebarLink icon={faPlane} to="/alerts" label="Emissões" disabled />
           <Badge className={`bg-green-600`}>Em Breve</Badge>
         </div>
       )}
 
-      {userData && userData?.invitationCode.toLowerCase() !== 'heron' && (
+      {userData && userData?.invitationCode?.toLowerCase() !== 'heron' && (
         <>
           <SidebarLink icon={faPlane} to="/alerts" label="Emissões" />
           <SidebarLink icon={faMagnifyingGlass} to="/ticket-search" label="Busca por passagens" />
