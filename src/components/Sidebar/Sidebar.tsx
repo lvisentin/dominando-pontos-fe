@@ -1,4 +1,4 @@
-import { faCog, faPlane, faMagnifyingGlass, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faPlane, faMagnifyingGlass, faDollarSign, faHome } from '@fortawesome/free-solid-svg-icons';
 import SidebarLink from "../SidebarLink/SidebarLink";
 import { useEffect, useState } from 'react';
 import { Badge } from '../ui/badge';
@@ -12,6 +12,7 @@ const Sidebar = () => {
 
   return <aside className="w-full md:w-[15%] md:min-w-[250px] pt-4 pb-4 md:pb-0">
     <ul>
+      <SidebarLink icon={faHome} to="/home" label="Home" />
       <SidebarLink icon={faCog} to="/config" label="Configurar alertas de pontos" />
       {userData && userData?.invitationCode === 'HERON' && (
         <div className='flex items-center'>

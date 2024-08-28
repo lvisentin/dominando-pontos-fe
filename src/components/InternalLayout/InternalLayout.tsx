@@ -19,7 +19,7 @@ const InternalLayout = () => {
   }, [])
 
   function redirectTelegramBot() {
-    window.open('https://t.me/dominando_pontos_bot', '_blank')
+    window.open('https://t.me/pontos_dominando_pontos_bot', '_blank')
   }
 
   return <div className="flex flex-col">
