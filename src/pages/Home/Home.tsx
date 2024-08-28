@@ -55,14 +55,14 @@ const Home = () => {
 
     return (
         <div className="flex flex-col text-left ">
-            <h1 className="text-2xl mb-2 font-bold">Bem vindo, {userInfo.name}</h1>
+            <h1 className="text-2xl mb-2 font-bold">Bem vindo, {userInfo?.name}</h1>
             <h2 className="text-lg mb-4">
                 Últimas novidades
             </h2>
 
             <div className="flex flex-wrap items-start justify-around lg:justify-start gap-4">
-                {loyaltyPrograms && loyaltyPrograms.map((lProgram: LoyaltyProgram) => (
-                    lProgram.currency ? <Card className="w-[45%] lg:w-[250px] flex flex-col items-center justify-center h-[250px]">
+                {loyaltyPrograms && loyaltyPrograms.map((lProgram: LoyaltyProgram, key) => (
+                    lProgram.currency ? <Card key={key} className="w-[45%] lg:w-[250px] flex flex-col items-center justify-center h-[250px]">
                         <div className="flex flex-col justify-center items-center">
                             <img src={lProgram.partner.logoUrl} className="w-[150px] mx-auto" />
                             <div className="flex items-center">
