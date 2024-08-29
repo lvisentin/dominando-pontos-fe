@@ -12,6 +12,7 @@ import NewPass from './pages/auth/NewPass/NewPass'
 import SignIn from './pages/auth/SignIn/SignIn'
 import SignUp from './pages/auth/SignUp/SignUp'
 import Alerts from './pages/Alerts/Alerts'
+import Home from './pages/Home/Home'
 
 const App = () => {
   const [invitationCode, setInvitationCode] = useState('');
@@ -23,7 +24,7 @@ const App = () => {
       window.location.href = `${import.meta.env.VITE_APP_URL}/config`;
     }
 
-    if(localStorage.getItem('userData')) {
+    if (localStorage.getItem('userData')) {
       setInvitationCode(JSON.parse(localStorage.getItem('userData')!)?.invitationCode)
     }
   }, [])
@@ -39,10 +40,11 @@ const App = () => {
         <Route path='/newPass' element={<NewPass />} />
 
         <Route element={<InternalLayout />}>
+          <Route path='/home' element={<Home />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/config' element={<Config />} />
           <Route path='/alerts' element={<Alerts />} />
-          {invitationCode !== 'HERON' && (
+          {invitationCode?.toLowerCase() !== 'heron' && (
             <>
               <Route path='/alerts/create' element={<AlertsCreate />} />
               <Route path='/ticket-search' element={<TicketSearch />} />
