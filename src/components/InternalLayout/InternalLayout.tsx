@@ -27,7 +27,7 @@ const InternalLayout = () => {
 
     {!hasTelegramBotSetup ? (
       <AlertMessage
-        message="Você ainda não configurou nosso bot do Telegram."
+        message="Você ainda não configurou seus alertas no Telegram."
         buttonTitle="Configure agora"
         action={redirectTelegramBot}
       />
