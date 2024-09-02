@@ -16,7 +16,7 @@ type AlertMessageProps = AlertMessageWithButtonProps | AlertMessageWithoutButton
 
 function AlertMessage(props: AlertMessageProps) {
   return (
-    <div className="flex justify-center items-center h-10 bg-[#da373c]">
+    <div className="flex justify-center items-center py-2 px-4 md:h-10 bg-[#da373c]">
       <div className="flex items-center justify-center gap-4">
         <p className="text-white text-sm font-semibold">{ props.message }</p>
         

@@ -62,9 +62,9 @@ const Home = () => {
 
             <div className="flex flex-wrap items-start justify-around lg:justify-start gap-4">
                 {loyaltyPrograms && loyaltyPrograms.map((lProgram: LoyaltyProgram, key) => (
-                    lProgram.currency ? <Card key={key} className="w-[45%] lg:w-[250px] flex flex-col items-center justify-center h-[250px]">
+                    lProgram.currency ? <Card key={key} className="w-full sm:w-[45%] lg:w-[250px] flex flex-col items-center justify-center h-[250px]">
                         <div className="flex flex-col justify-center items-center">
-                            <img src={lProgram.partner.logoUrl} className="w-[150px] mx-auto" />
+                            <img src={lProgram.partner.logoUrl} className="h-[80px] w-auto mx-auto" />
                             <div className="flex items-center">
                                 <span className="text-xs">{lProgram.currency}</span>
                                 <p className="text-xl font-bold ml-2"> {lProgram.baseValue} </p>

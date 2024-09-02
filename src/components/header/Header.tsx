@@ -15,8 +15,12 @@ const LoggedInHeader = ({ user }: { user: User }) => {
   }
 
   return <header className="px-6 flex items-center justify-between w-full bg-primary text-white font-bold py-4">
-    <span className="text-white">
+    <span className="hidden md:block text-white">
       Dominando Pontos
+    </span>
+    
+    <span className="block md:hidden text-white">
+      DP
     </span>
 
     <div className="actions text-white text-sm flex items-center gap-2">

@@ -61,7 +61,7 @@ const SignUp = () => {
     authService.signUp({ email, name, password, invitationCode, phone: cleanPhone(phone) }).then((r: SignUpResponse) => {
       localStorage.setItem('authorization', r.accessToken)
       localStorage.setItem('userData', JSON.stringify(r.user))
-      navigate('/config')
+      navigate('/home')
     })
       .catch((err) => toast({ description: handleFetchErrorMessage(err.message).message }))
       .finally(() => setLoading(false))
