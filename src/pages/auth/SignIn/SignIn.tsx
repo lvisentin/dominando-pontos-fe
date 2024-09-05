@@ -14,13 +14,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
 import { authService } from "@/services/auth/AuthService";
 import { SignInResponse } from "@/services/auth/auth.model";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import styles from "./SignIn.module.css";
 
 const SignIn = () => {
   const [loading, setLoading] = useState(false);
+  const [seePass, setSeePass] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -95,15 +99,18 @@ const SignIn = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem className="text-left">
+                <FormItem className="text-left relative">
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Digite sua senha"
-                      type="password"
+                      type={seePass ? "text" : "password"}
                       {...field}
                     />
                   </FormControl>
+                  <button onClick={() => setSeePass((prev) => !prev)} className={`${styles.icon} absolute right-0 top-6 text-black p-2 rounded-lg`} type="button">
+                    {seePass ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
+                  </button>
                   <FormMessage />
                 </FormItem>
               )}
