@@ -38,6 +38,11 @@ const InternalLayout = () => {
       <main className="w-full  min-h-screen bg-slate-50 p-4 md:p-6">
         <Outlet />
       </main>
+
+      <a target="_blank" href="https://api.whatsapp.com/send?phone=+551132808660&text=Ol%C3%A1%2C+gostaria+de+ajuda+sobre+o+Dominando+Pontos" className="fixed bottom-4 right-4 rounded-full bg-primary hover:bg-primary/80 cursor-pointer transition-all text-white py-4 px-8 flex items-center gap-2">
+        <img src="/whatsapp.svg" className="w-5 h-5" />
+        <span className="text-white font-semibold">Suporte</span>
+      </a>
     </div>
   </div>
 }
