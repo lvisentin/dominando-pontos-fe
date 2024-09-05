@@ -1,6 +1,15 @@
+import AlertCategorySelect from "@/components/AlertCategorySelect/AlertCategorySelect";
+import LoadingButton from "@/components/LoadingButton/LoadingButton";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { homeService } from "@/services/home/HomeService"
-import { useEffect, useState } from "react"
+import {
+    Form, FormControl, FormField, FormItem, FormLabel
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { homeService } from "@/services/home/HomeService";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 interface LoyaltyProgram {
     id: number;
@@ -33,12 +42,23 @@ const Home = () => {
     const [loyaltyPrograms, setLoyaltyPrograms] = useState([]);
     const userData = localStorage.getItem('userData')!;
     const userInfo = JSON.parse(userData);
+    const [filters, setFilters] = useState({ livelo: false, esfera: false });
+    const [categoryFilter, setCategoryFilter] = useState(1);
+    const [loading, setLoading] = useState(false);
+
+    const form = useForm({
+        defaultValues: {
+            search: "",
+        },
+    });
 
     const fetchLoyaltyPrograms = () => {
+        setLoading(true);
         homeService
-            .getLoyaltyPrograms()
+            .getLoyaltyPrograms(filters, categoryFilter, form.getValues().search)
             .then((response) => setLoyaltyPrograms(response))
-            .catch(console.log);
+            .catch(console.log)
+            .finally(() => setLoading(false));
     }
 
     useEffect(() => {
@@ -50,7 +70,35 @@ const Home = () => {
         }
 
         fetchLoyaltyPrograms();
-    }, [])
+    }, []);
+
+
+    useEffect(() => {
+        fetchLoyaltyPrograms();
+    }, [filters, categoryFilter])
+
+    const filter = (filterValue: string) => {
+        if (filterValue === 'livelo') {
+            if (filters.livelo) {
+                setFilters({ livelo: false, esfera: false });
+                console.log('already has livelo')
+                return;
+            }
+            console.log('set livelo')
+
+            setFilters({ livelo: true, esfera: false });
+
+        }
+
+        if (filterValue === 'esfera') {
+            if (filters.esfera) {
+                setFilters({ esfera: false, livelo: false });
+                return;
+            }
+
+            setFilters({ esfera: true, livelo: false });
+        }
+    }
 
 
     return (
@@ -60,8 +108,46 @@ const Home = () => {
                 Últimas novidades
             </h2>
 
+            <div className="filters mb-4">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(fetchLoyaltyPrograms)} className="flex flex-wrap items-center gap-4" >
+                        <FormField
+                            control={form.control}
+                            name="search"
+                            render={({ field }) => (
+                                <FormItem className="text-left w-full md:w-[300px]">
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Busque por uma loja específica"
+                                            type="text"
+                                            disabled={loading}
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <AlertCategorySelect
+                            value={categoryFilter}
+                            onSelect={(value: number) =>
+                                setCategoryFilter(value)
+                            }
+                            disabled={loading}
+                        />
+
+                        <Button disabled={loading} type="button" variant={filters.livelo ? "default" : "outline"} onClick={() => filter('livelo')}> Livelo </Button>
+                        <Button disabled={loading} type="button" variant={filters.esfera ? "default" : "outline"} onClick={() => filter('esfera')}> Esfera </Button>
+
+                        <LoadingButton loading={loading} text={"Buscar"} type="submit" />
+                    </form>
+                </Form>
+
+
+            </div>
+
             <div className="flex flex-wrap items-start justify-around lg:justify-start gap-4">
-                {loyaltyPrograms && loyaltyPrograms.map((lProgram: LoyaltyProgram, key) => (
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : loyaltyPrograms && loyaltyPrograms.map((lProgram: LoyaltyProgram, key) => (
                     lProgram.currency ? <Card key={key} className="w-full sm:w-[45%] lg:w-[250px] flex flex-col items-center justify-center h-[250px]">
                         <div className="flex flex-col justify-center items-center">
                             <img src={lProgram.partner.logoUrl} className="h-[80px] w-auto mx-auto" />
@@ -76,6 +162,7 @@ const Home = () => {
                         </div>
                     </Card> : <></>
                 ))}
+
             </div>
         </div>
     )
