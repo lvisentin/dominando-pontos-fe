@@ -51,7 +51,7 @@ const AlertCategorySelect = ({ value, onSelect, disabled }: AlertCategorySelectP
         >
           {value
             ? categories.find(
-              (category) => category.id === value
+              (category: any) => category.id === value
             )?.name
             : "Selecione uma cabine"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -63,7 +63,7 @@ const AlertCategorySelect = ({ value, onSelect, disabled }: AlertCategorySelectP
       }}>
         <Command>
           <CommandGroup className="max-h-[200px] overflow-y-auto">
-            {categories.map((category) => (
+            {categories.map((category: any) => (
               <CommandItem
                 value={category.name}
                 key={category.id}

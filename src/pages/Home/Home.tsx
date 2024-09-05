@@ -3,7 +3,7 @@ import LoadingButton from "@/components/LoadingButton/LoadingButton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-    Form, FormControl, FormField, FormItem, FormLabel
+    Form, FormControl, FormField, FormItem
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { homeService } from "@/services/home/HomeService";
@@ -129,7 +129,7 @@ const Home = () => {
                         />
 
                         <AlertCategorySelect
-                            value={categoryFilter}
+                            value={categoryFilter as any}
                             onSelect={(value: number) =>
                                 setCategoryFilter(value)
                             }
