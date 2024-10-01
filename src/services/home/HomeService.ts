@@ -1,7 +1,7 @@
 import { api } from "@/shared/api/api";
 
 class HomeService {
-    async getLoyaltyPrograms(filters: { livelo: boolean, esfera: boolean }, categoryFilter: number, search: string) {
+    async getLoyaltyPrograms(filters: { livelo: boolean, esfera: boolean }, categoryFilter: number, orderFilter: string, search: string) {
         let appliedFilters = '';
         if (filters.livelo) {
             appliedFilters = 'program=livelo'
@@ -14,7 +14,7 @@ class HomeService {
         console.log('search', search)
 
         const authorization = `Bearer ${localStorage.getItem('authorization')}`;
-        return await api.get(`partner-loyalty-programs?page=1&limit=15&${appliedFilters}&partnerCategoryId=${categoryFilter}&${search ? `search=${search}` : ''}`, { authorization });
+        return await api.get(`partner-loyalty-programs?page=1&limit=15${appliedFilters ? `&${appliedFilters}` : ''}${categoryFilter ? `&partnerCategoryId=${categoryFilter}`: ''}${search ? `&search=${search}` : ''}${orderFilter ? `&${orderFilter}` : ''}`, { authorization });
     }
 }
 
