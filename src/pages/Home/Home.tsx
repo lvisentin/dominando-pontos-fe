@@ -168,7 +168,7 @@ const Home = () => {
 
             </div>
 
-            <h1 className="mb-4 text-sm">Atualizado pela última vez em: {getRoundedTime().toLocaleString('pt-BR')}</h1>
+            <h1 className="mb-4 text-sm">Atualizado pela última vez em: {getRoundedTime().toLocaleString()}</h1>
 
             <div className="flex flex-wrap items-start justify-around lg:justify-start gap-4">
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : loyaltyPrograms && loyaltyPrograms.map((lProgram: LoyaltyProgram, key) => (

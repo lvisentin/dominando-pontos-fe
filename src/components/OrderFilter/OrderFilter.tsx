@@ -1,21 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { categoriesService } from "@/services/categories/CategoriesService";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface OrderFilterProps {
   value: string;
-  onSelect: (value: number) => void;
+  onSelect: (value: string) => void;
   disabled: boolean;
 }
 
 const OrderFilter = ({ value, onSelect, disabled }: OrderFilterProps) => {
-  const { toast } = useToast();
-
   const orderFilters = [
     {
       value: 'orderBy=updatedAt&order=desc',
@@ -36,7 +32,7 @@ const OrderFilter = ({ value, onSelect, disabled }: OrderFilterProps) => {
   ]
   const [triggerRef, setTriggerRef] = useState<HTMLButtonElement | null>(null)
 
-  const handleSelectedFilter = (filter: number) => {
+  const handleSelectedFilter = (filter: string) => {
     onSelect(filter)
     triggerRef?.click()
   }
