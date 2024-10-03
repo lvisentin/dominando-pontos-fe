@@ -23,11 +23,11 @@ const OrderFilter = ({ value, onSelect, disabled }: OrderFilterProps) => {
     },
     {
       value: 'orderBy=parityClub&order=asc',
-      label: 'Pontos crescente'
+      label: 'Menor pontuação'
     },
     {
       value: 'orderBy=parityClub&order=desc',
-      label: 'Pontos decrescente'
+      label: 'Maior pontuação'
     },
   ]
   const [triggerRef, setTriggerRef] = useState<HTMLButtonElement | null>(null)
