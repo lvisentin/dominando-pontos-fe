@@ -1,21 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import InternalLayout from './components/InternalLayout/InternalLayout'
 import { Toaster } from './components/ui/toaster'
-import AlertsCreate from './pages/Alerts/Create'
+import Alerts from './pages/Alerts/Alerts'
 import Config from './pages/Config/Config'
 import Dashboard from './pages/Dashboard/Dashboard'
-import Plans from './pages/Plans/Plans'
-import TicketSearch from './pages/TicketSearch/TicketSearch'
+import Home from './pages/Home/Home'
 import NewPass from './pages/auth/NewPass/NewPass'
 import SignIn from './pages/auth/SignIn/SignIn'
 import SignUp from './pages/auth/SignUp/SignUp'
-import Alerts from './pages/Alerts/Alerts'
-import Home from './pages/Home/Home'
 
 const App = () => {
-  const [invitationCode, setInvitationCode] = useState('');
+  // const [invitationCode, setInvitationCode] = useState('');
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('authorization')
@@ -24,9 +21,9 @@ const App = () => {
       window.location.href = `${import.meta.env.VITE_APP_URL}/config`;
     }
 
-    if (localStorage.getItem('userData')) {
-      setInvitationCode(JSON.parse(localStorage.getItem('userData')!)?.invitationCode)
-    }
+    // if (localStorage.getItem('userData')) {
+    //   setInvitationCode(JSON.parse(localStorage.getItem('userData')!)?.invitationCode)
+    // }
   }, [])
 
   return (
