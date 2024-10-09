@@ -9,6 +9,9 @@ import { homeService } from "@/services/home/HomeService";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import PointsHistoryDialog from "@/components/PointsHistoryDialog/PointsHistoryDialog";
 
 interface LoyaltyProgram {
   id: number;
@@ -27,6 +30,7 @@ interface LoyaltyProgram {
   legalTerms: string;
   createdAt: string;
   updatedAt: string;
+  partnerLoyaltyProgramHistories: any;
   partner: {
     id: number;
     name: string;
@@ -109,6 +113,39 @@ const Home = () => {
 
       setFilters({ esfera: true, livelo: false });
     }
+  };
+
+  const getChartData = (lProgram: LoyaltyProgram) => {
+    const pointsHistoryArray =
+      lProgram?.partnerLoyaltyProgramHistories
+
+    const pointsArray = pointsHistoryArray.map((item: any, index: number) => {
+      return [
+        pointsHistoryArray[index - 1]?.createdAt ?? lProgram.createdAt,
+        item.parityClub
+      ]
+    })
+
+    pointsArray.push([pointsHistoryArray[pointsHistoryArray.length - 1]?.createdAt, lProgram.parityClub])
+
+    return {
+      labels: pointsArray.map((item: any) => {
+        if (!item[0]) return
+
+        const parsedDate = parseISO(item[0] ?? '');
+        const formattedDate = format(parsedDate, "dd MMM", { locale: ptBR });
+
+        return formattedDate;
+      }),
+      datasets: [
+        {
+          label: 'Quantidade de pontos',
+          data: pointsArray.map((item: any) => item[1]),
+          borderColor: "#316A7D",
+          backgroundColor: "rgb(49, 106, 125, 0.5)",
+        },
+      ],
+    };
   };
 
   const nextPage = () => {
@@ -203,6 +240,9 @@ const Home = () => {
                     }`}
                   >
                     {lProgram.programName}
+                  </div>
+                  <div className="absolute top-4 right-4 rounded-full text-xs border w-[30px] h-[30px] flex items-center justify-center cursor-pointer">
+                    <PointsHistoryDialog data={getChartData(lProgram)}/>
                   </div>
                   <img
                     src={lProgram.partner.logoUrl}
