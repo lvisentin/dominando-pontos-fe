@@ -115,18 +115,41 @@ const Home = () => {
     }
   };
 
+  function generatePastDates(inputDateStr: string) {
+    const inputDate = new Date(inputDateStr);
+
+    const pastDates = [];
+
+    for (let i = 0; i < 5; i++) {
+      const newDate = new Date(inputDate);
+      newDate.setMonth(inputDate.getMonth() - (i + 1));
+
+      pastDates.push(newDate.toISOString());
+    }
+
+    return pastDates.reverse();
+  }
+
   const getChartData = (lProgram: LoyaltyProgram) => {
     const pointsHistoryArray =
       lProgram?.partnerLoyaltyProgramHistories
+    let pointsArray = []
 
-    const pointsArray = pointsHistoryArray.map((item: any, index: number) => {
-      return [
-        pointsHistoryArray[index - 1]?.createdAt ?? lProgram.createdAt,
-        item.parityClub
-      ]
-    })
+    if (pointsHistoryArray.length) {
+      pointsArray = pointsHistoryArray.map((item: any, index: number) => {
+        return [
+          pointsHistoryArray[index - 1]?.createdAt ?? lProgram.createdAt,
+          item.parityClub
+        ]
+      })
 
-    pointsArray.push([pointsHistoryArray[pointsHistoryArray.length - 1]?.createdAt, lProgram.parityClub])
+      pointsArray.push([pointsHistoryArray[pointsHistoryArray.length - 1]?.createdAt, lProgram.parityClub])
+    } else {
+      const futureDates = generatePastDates(lProgram.createdAt)
+
+      pointsArray = futureDates.map((item: any) => [item, 0])
+      pointsArray.push([lProgram.createdAt, lProgram.parityClub])
+    }
 
     return {
       labels: pointsArray.map((item: any) => {
